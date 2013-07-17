@@ -1,0 +1,46 @@
+####running Augustus on beocat
+####Tara Marriage
+####Kansas State University
+####Olson lab
+####6Sept12
+#--indicate comments
+$--indicates command prompt input
+
+########################################################################################
+#to unpack augustus.tar, typed the following into beocat, in my home directory
+
+     tar xvf augustus.tar
+
+#Switch to bash
+
+$/bin/bash
+
+##Export augustus config path
+
+$export AUGUSTUS_CONFIG_PATH=/homes/tmarria/augustus.2.6.1/config
+
+$augustus.2.6.1/scripts/autoAugPred.pl --genome=/homes/tmarria/GoniumMinusProj701.Scaffolds.MTmod.fa --species=chlamydomonas --hints=/homes/tmarria/hints.gff 
+
+$cd autoAugPred_hints/
+
+$cd shells
+
+$vi shellForAug
+
+#edit the shellForAug script
+
+#Make it look similar to the following
+
+#    echo 'PATH="${PATH}":'"$AUGUSTUS_CONFIG_PATH/../src/" > aug$i_temp
+#    echo "export PATH" >> aug$i_temp
+    echo '#!/bin/bash' > aug$i_temp
+    cat "aug$i" >> aug$i_temp
+    mv aug$i_temp aug$i
+    chmod +x aug$i
+    qsub -cwd "aug$i"
+
+$:wq<Return> 
+     #the above will save the file and exit vi editor
+
+#to get the shells to run, just run the shellForAug script
+$./shellForAug

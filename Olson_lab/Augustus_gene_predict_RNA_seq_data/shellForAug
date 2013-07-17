@@ -1,0 +1,10 @@
+for (( i=1; i<=18; i++))
+do
+   # echo 'PATH="${PATH}":'"$AUGUSTUS_CONFIG_PATH/../src/" > aug$i_temp
+   # echo "export PATH" >> aug$i_temp
+    echo '#!/bin/bash' > aug$i_temp	
+    cat "aug$i" >> aug$i_temp
+    mv aug$i_temp aug$i
+    chmod +x aug$i
+    qsub -cwd "aug$i"
+done
