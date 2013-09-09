@@ -44,7 +44,7 @@ foreach my $f (@ARGV) ## make a hash of raw counts
 }
 
 
-# foreach $j (0 .. $#samples) ## optional printing a samplids, comment out lines 45 to 55 if you do not want these
+# foreach $j (0 .. $#samples) ## optional printing of samplids, uncomment out lines 16 to 17 and lines 47 to 57 if you want a sample id row
 # {
 # 	if ($j < $#samples)
 # 	{
