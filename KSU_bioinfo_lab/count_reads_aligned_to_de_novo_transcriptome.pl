@@ -5,10 +5,10 @@ use Data::Dumper;
 use IO::File;
 #  count_reads_aligned_to_de_novo_transcriptome.pl
 #  USAGE: perl count_reads_aligned_to_de_novo_transcriptome.pl [filename/s]
-# This script takes sam files (one per biological or technical replicate) and outputs tab separated list where the first column is the name of the contig and the values are the read counts per sample (in the same order as you listed your sam files)
-# 
-# Change the default MAPping Quality in line
-# The script will print out sample ids. replace the example sample ids in line 43 with your own before running. This step is optional. Uncomment line 42 to 43 and lines 47 to 57 if you want these printed.
+# This script takes sam files from Bowtie2 (one per biological or technical replicate) and outputs tab separated list where the first column is the name of the contig and the values are the read counts per sample (in the same order as you listed your sam files)
+# Added filters based on MAPQ and pair relationships for Bowtie2 sam files 
+# Change the default MAPping Quality in line 23.
+# The script will print out sample ids. Replace the example sample ids in line 19 with your own before running. This step is optional. Uncomment line 18 to 19 and lines 144 to 154 if you want these printed.
 #
 #  Created by jennifer shelton on 9/15/13.
 ##################  define variables #################################################
