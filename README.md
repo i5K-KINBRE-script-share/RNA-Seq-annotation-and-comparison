@@ -21,10 +21,17 @@ KSU_bioinfo_lab
 
 **count_reads_aligned_to_de_novo_transcriptome.pl** - This script takes sam files from Bowtie2 (one per biological or technical replicate) and outputs tab separated list where the first column is the name of the contig and the values are the read counts per sample (in the same order as you listed your sam files).
 
+**To use this script:**
+
+Step 1: align paired end reads to a clustered de novo transcriptome using the Bowtie2 "best mapping" (default) reporting mode
+
+Step 2: Run by passing your SAM file output (one per sample) in the same order as you enter your sample ids (ids are optional) see below for more instructions
+
 Reads are filtered based on MAPQ and pair relationships from Bowtie2 sam files. Reads passing these filters are counted as indicated below:
   ![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/accepted_alignments.png)
   Reads diagramed below would not pass the filters and would not be counted for any contig:
   ![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/rejected_alignments.png)
-  Below is the decision diagram for the read counting script:
+  Below is the decision diagram for the read counting script CP, DP, UP, and UU are defined in Bowtie2 documentation http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#sam-output
+:
   ![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/count_diagram.png)
   Change the default MAPping Quality in line 23. The script will print out sample ids. Replace the example sample ids in line 19 with your own before running. This step is optional. Uncomment line 18 to 19 and lines 144 to 154 if you want these printed.
