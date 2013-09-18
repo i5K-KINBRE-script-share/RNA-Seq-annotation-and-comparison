@@ -25,4 +25,6 @@ Reads are filtered based on MAPQ and pair relationships from Bowtie2 sam files. 
   ![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/accepted_alignments.png)
   Reads diagramed below would not pass the filters and would not be counted for any contig:
   ![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/rejected_alignments.png)
+  Below is the decision diagram for the read counting script:
+  ![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/count_diagram.png)
   Change the default MAPping Quality in line 23. The script will print out sample ids. Replace the example sample ids in line 19 with your own before running. This step is optional. Uncomment line 18 to 19 and lines 144 to 154 if you want these printed.
