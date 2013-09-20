@@ -133,12 +133,13 @@ foreach my $f (@ARGV)
 	        		}
 	        	}
 		}
-	    print "$f concordant_pair_mapped_reads=$concordant_pair_mapped_read\n";
-		print "$f discordant_pair_mapped_reads=$discordant_pair_mapped_read\n";
-		print "$f unpaired_mate_mapped_reads=$unpaired_mate_mapped_reads\n";
-		print "$f single_end_mapped_reads=$single_end_mapped_reads\n";
-    }
-    $i++;
+	    
+    	}
+    	print "$f concordant_pair_mapped_reads=$concordant_pair_mapped_read\n";
+	print "$f discordant_pair_mapped_reads=$discordant_pair_mapped_read\n";
+	print "$f unpaired_mate_mapped_reads=$unpaired_mate_mapped_reads\n";
+	print "$f single_end_mapped_reads=$single_end_mapped_reads\n";
+    	$i++;
 	$file->close;
 }
 # foreach $j (0 .. $#samples) ## optional printing of sample ids, uncomment out lines 42 to 43 and lines 168 to 178 if you want a sample id row
