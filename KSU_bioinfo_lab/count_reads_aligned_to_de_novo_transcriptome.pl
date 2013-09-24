@@ -135,6 +135,7 @@ foreach my $f (@ARGV)
 ################################# count single end reads (UU) ##################################	        		
 	        if ($_ =~ /YT:Z:UU/)
 	        	{
+	        		$fragment++;
 	        		if (($temp[4]>$mapq)&&($temp[4]!=255))
 	        		{
 	  	        		$count_hash{$temp[2]}->[$i]++; ## count one for a single end read read maps relatively unambiguously (above MAPQ cutoff)
