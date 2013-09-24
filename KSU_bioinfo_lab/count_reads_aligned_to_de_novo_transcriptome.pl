@@ -34,6 +34,7 @@ foreach my $f (@ARGV)
 	my $discordant_pair_mapped_read=0;
 	my $unpaired_mate_mapped_reads=0; # only one end maps relatively unambiguously (above MAPQ cutoff) 
 	my $single_end_mapped_reads=0;
+	my $fragment=0; # counts one for each pair or singleton (UU in Bowtie2 syntax) regardless of whether or not they map
 	my %read_hash;
 	my $file = IO::File->new($f);
 	while (<$file>)
@@ -53,6 +54,7 @@ foreach my $f (@ARGV)
 	        	{
 	        		unless ($read_hash{$temp[0]})
 	        		{
+	        			$fragment++;
 	        			if (($temp[4]>$mapq)&&($temp[4]!=255))
 	        			{
 	        				$read_hash{$temp[0]}=1;
@@ -76,6 +78,7 @@ foreach my $f (@ARGV)
 	        	{
 	        		unless ($read_hash{$temp[0]})
 	        		{
+	        			$fragment++;
 	        			if (($temp[4]>$mapq)&&($temp[4]!=255))
 	        			{
 	        				$read_hash{$temp[0]}=1;
@@ -95,11 +98,17 @@ foreach my $f (@ARGV)
 	        		}
 	        	}
 	        }
+	        elsif (($read_hash{$temp[0]}) && ($temp[6] ne '=') && (($_ =~ /YT:Z:CP/) || ($_ =~ /YT:Z:DP/)))
+	        {
+	        	$fragment++;
+	        	$read_hash{$temp[0]}=0;
+	        }
 ################# if one pair fails and one passes count broken pairs (UP) ################################	        		
 	        if ($_ =~ /YT:Z:UP/)
 	        	{
 	        		unless ($read_hash{$temp[0]})
 	        		{
+	        			$fragment++;
 	        			if (($temp[4]>$mapq)&&($temp[4]!=255))
 	        			{
 	        				$read_hash{$temp[0]}=1;
@@ -139,6 +148,7 @@ foreach my $f (@ARGV)
 	print "$f discordant_pair_mapped_reads=$discordant_pair_mapped_read\n";
 	print "$f unpaired_mate_mapped_reads=$unpaired_mate_mapped_reads\n";
 	print "$f single_end_mapped_reads=$single_end_mapped_reads\n";
+	print "$f fragments (mapped and unmapped)=$fragments\n";
     	$i++;
 	$file->close;
 }
