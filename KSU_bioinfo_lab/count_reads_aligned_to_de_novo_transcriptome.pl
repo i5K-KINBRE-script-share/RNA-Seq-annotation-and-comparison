@@ -28,6 +28,7 @@ for (0..$#ARGV) ## populate default values for each contig
 }
 open (COUNT_FILES, ">", "$outfile") or die "cannot open $outfile: $!";
 ################################ make a count_hash of raw counts ################################
+print "Summary of fragments counted by this script:\n"; # header for output summary
 foreach my $f (@ARGV)
 {
 	my $concordant_pair_mapped_read=0;
@@ -147,11 +148,11 @@ foreach my $f (@ARGV)
 		}
 	    
     	}
-    	print "$f concordant_pair_mapped_reads=$concordant_pair_mapped_read\n";
-	print "$f discordant_pair_mapped_reads=$discordant_pair_mapped_read\n";
-	print "$f unpaired_mate_mapped_reads=$unpaired_mate_mapped_reads\n";
-	print "$f single_end_mapped_reads=$single_end_mapped_reads\n";
-	print "$f fragments (mapped and unmapped)=$fragments\n";
+    	print "$f concordant_pairs that were added to count summary=$concordant_pair_mapped_read\n";
+	print "$f discordant_pairs that were added to count summary=$discordant_pair_mapped_read\n";
+	print "$f unpaired_mates that were added to count summary=$unpaired_mate_mapped_reads\n";
+	print "$f single_end_reads that were added to count summary=$single_end_mapped_reads\n";
+	print "$f fragments (counted and uncounted)=$fragments\n";
     	$i++;
 	$file->close;
 }
