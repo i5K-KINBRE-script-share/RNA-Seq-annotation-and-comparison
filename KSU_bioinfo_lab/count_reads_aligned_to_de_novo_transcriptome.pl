@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Data::Dumper;
 use IO::File;
 #  count_reads_aligned_to_de_novo_transcriptome.pl
 #  USAGE: perl count_reads_aligned_to_de_novo_transcriptome.pl [filename/s]
