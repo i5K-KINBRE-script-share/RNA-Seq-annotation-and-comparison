@@ -26,7 +26,7 @@ for (0..$#ARGV) ## populate default values for each contig
 {
     push(@default,'0');
 }
-open (COUNT_FILES, ">$outfile");
+open (COUNT_FILES, ">", "$outfile") or die "cannot open $outfile: $!";
 ################################ make a count_hash of raw counts ################################
 foreach my $f (@ARGV)
 {
@@ -36,7 +36,9 @@ foreach my $f (@ARGV)
 	my $single_end_mapped_reads=0;
 	my $fragment=0; # counts one for each pair or singleton (UU in Bowtie2 syntax) regardless of whether or not they map
 	my %read_hash;
-	my $file = IO::File->new($f);
+	my $file = IO::File->new();
+    	if ($file->open("< $f")) {print "$f opened\n";}
+    	else {print "could not open $f\n";}
 	while (<$file>)
 	{
 		unless (/^\@/)
