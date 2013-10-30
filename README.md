@@ -19,13 +19,13 @@ KSU_bioinfo_lab
 
 **assembly_quality_stats_for_multiple_assemblies.pl** - This script runs a slightly modified version of Joseph Fass' Count_fasta.pl (original available at http://wiki.bioinformatics.ucdavis.edu/index.php/Count_fasta.pl ) on a fasta file from each assembly. It then creates comma separated file called assembly_metrics.csv listing the N25,N50,N75, cumulative contig length, and number of contigs for each assembly (also download Count_fastas.pl and change $path_to_Count_fastas on line 13 of assembly_quality_stats_for_multiple_assemblies.pl).
 
-**count_reads_aligned_to_de_novo_transcriptome.pl** - This script takes sam files from Bowtie2 (one per biological or technical replicate) and outputs tab separated list where the first column is the name of the contig and the values are the read counts per sample (in the same order as you listed your sam files).
+**Count_reads_denovo.pl** - This script takes sam files from Bowtie2 (one per biological or technical replicate) and outputs tab separated list where the first column is the name of the contig and the values are the read counts per sample (in the same order as you listed your sam files).
 
 **To use this script:**
 
 Step 1: Align paired end reads to a clustered de novo transcriptome using the Bowtie2 "best mapping" (default) reporting mode.
 
-Step 2: Run by passing your SAM file output as arguements when you run count_reads_aligned_to_de_novo_transcriptome.pl (one SAM file per sample) in the same order as you enter your sample ids (ids are optional) see below for more instructions.
+Step 2: Run by passing your SAM file output as arguements when you run Count_reads_denovo.pl (one SAM file per sample) in the same order as you enter your sample ids (ids are optional) see below for more instructions.
 
 Reads are filtered based on MAPQ and pair relationships from Bowtie2 sam files. Reads passing these filters are counted as indicated below:
   ![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/accepted_alignments.png)
