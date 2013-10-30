@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use IO::File;
 #  count_reads_aligned_to_de_novo_transcriptome.pl
-#  USAGE: perl count_reads_aligned_to_de_novo_transcriptome.pl [filename/s]
+#  USAGE: perl Count_reads_denovo.pl [filename/s]
 # This script takes sam files from Bowtie2 (one per biological or technical replicate) and outputs tab separated list where the first column is the name of the contig and the values are the read counts per sample (in the same order as you listed your sam files)
 # Added filters based on MAPQ and pair relationships for Bowtie2 sam files 
 # Change the default MAPping Quality in line 23.
