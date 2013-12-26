@@ -25,7 +25,11 @@ KSU_bioinfo_lab
 
 Step 1: Align paired end reads to a clustered de novo transcriptome using the Bowtie2 "best mapping" (default) reporting mode.
 
-Step 2: Run by passing your SAM file output as arguements when you run Count_reads_denovo.pl (one SAM file per sample) in the same order as you enter your sample ids (ids are optional) see below for more instructions.
+Step 2: Run by passing your SAM file output as arguements when you run Count_reads_denovo.pl (one SAM file per sample) in the same order as you enter your sample ids (ids are optional). A more detailed README can be viewed at https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/tree/master/KSU_bioinfo_lab/Count_reads_denovo. The manual can be viewed by running:
+
+```
+perl Count_reads_denovo.pl --man
+```
 
 Reads are filtered based on MAPQ and pair relationships from Bowtie2 sam files. Reads passing these filters are counted as indicated below:
   ![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/accepted_alignments.png)
@@ -34,4 +38,7 @@ Reads are filtered based on MAPQ and pair relationships from Bowtie2 sam files. 
   Below is the decision diagram for the read counting script. Concordant pairs (CP), discordant pairs (DP), unpaired mates (UP), and mateless reads (UU) are defined in Bowtie2 documentation http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#sam-output
 :
   ![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/count_diagram.png)
-  Change the default MAPping Quality in line 23. The script will print out sample ids. Replace the example sample ids in line 19 with your own before running. This step is optional. Uncomment line 18 to 19 and lines 144 to 154 if you want these printed.
+
+Minimum MAPQ can be adjusted. The default minimum is 10.
+
+
