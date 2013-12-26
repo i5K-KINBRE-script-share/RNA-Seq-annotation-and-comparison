@@ -88,13 +88,13 @@ DESCRIPTION
 **Test with sample datasets:**
        
 
-       $ git clone  https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison
+       git clone  https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison
 
-       $ cd RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/Count_reads_denovo
+       cd RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/Count_reads_denovo
 
-       $ mkdir results
+       mkdir results
 
-       $ perl Count_reads_denovo.pl --sams
+       perl Count_reads_denovo.pl --sams
        samples/sample1.sam,samples/sample2.sam,samples/sample3.sam --labels sample1,sample2,sample3
        --mapq 15 --out results/test
        
