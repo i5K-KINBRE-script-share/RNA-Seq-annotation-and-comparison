@@ -24,7 +24,7 @@ print "#                                                         #\n";
 print "#  perl script.pl -help # for usage/options               #\n";
 print "#  perl script.pl -man # for more details                 #\n";
 print "###########################################################\n";
-print "https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/Count_reads_denovo.pl\n\n";
+print "https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/Count_reads_denovo/Count_reads_denovo.pl\n\n";
 
 ##################################################################################
 ##############                get arguments                     ##################
