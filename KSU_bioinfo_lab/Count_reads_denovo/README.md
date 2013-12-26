@@ -1,36 +1,44 @@
-NAME
-       Count_reads_denovo_test.pl - This script takes sam files from Bowtie2
-       (one per biological replicate) and outputs tab separated list where the
-       first column is the name of the contig and the values are the read
-       counts per sample (in the same order as you listed your sam files)
+SCRIPT
 
-       The script filters results based on pair relationships reported by
-       Bowtie2 (Concordant pairs (CP), discordant pairs (DP), unpaired mates
-       (UP), and mateless reads (UU)). These classes are used to ensure that
-       no fragment is counted twice (e.g. for each mate separately) and that
-       no fragment is counted as aligning to more than one contig. The pair
-       relationships are defined in Bowtie2 documentation
-       http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#sam-output.
-       Diagrams of acceptable or unacceptable alignments and a decision
-       diagram for Count_reads_denovo_test.pl can be found at
-       https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison.
+**Count_reads_denovo_test.pl -**
+This script takes sam files from Bowtie2
+(one per biological replicate) and outputs tab separated list where the
+first column is the name of the contig and the values are the read
+counts per sample (in the same order as you listed your sam files). 
+The script will print out sample ids only if the users provides them.
 
-       The user can filter alignments further by adjusting the minimum MAPQ.
-       MAPQ, as reported by Bowtie2, indicates the ambiguity of an alignment
-       by comparing the alignment score of the current alignment to the score
-       of the next best alignment. A score of 0 indicates that the next best
-       alignment has the same score as the current alignment (e.g. we have no
-       evidence that this alignment is more correct than another alignment).
-       The default MAPQ filter for this script is 10 indicating the mate has a
-       1 in 10 chance of actually aligning elsewhere. If the MAPQ filter is
-       set to 20 then, to be counted, all mates must align with at least a 1
-       in 100 chance of actually aligning to the reported position.
+The script filters results based on pair relationships reported by
+Bowtie2 (Concordant pairs (CP), discordant pairs (DP), unpaired mates
+(UP), and mateless reads (UU)). These classes are used to ensure that
+no fragment is counted twice (e.g. for each mate separately) and that
+no fragment is counted as aligning to more than one contig. The pair
+relationships are defined in Bowtie2 documentation
+http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#sam-output.
 
-       The script will print out sample ids only if the users provides them.
+Below are diagrams of acceptable or unacceptable alignments.
+
+![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/accepted_alignments.png)
+![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/rejected_alignments.png)
+
+The user can filter alignments further by adjusting the minimum MAPQ.
+MAPQ, as reported by Bowtie2, indicates the ambiguity of an alignment
+by comparing the alignment score of the current alignment to the score
+of the next best alignment. A score of 0 indicates that the next best
+alignment has the same score as the current alignment (e.g. we have no
+evidence that this alignment is more correct than another alignment).
+The default MAPQ filter for this script is 10 indicating the mate has a
+1 in 10 chance of actually aligning elsewhere. If the MAPQ filter is
+set to 20 then, to be counted, all mates must align with at least a 1
+in 100 chance of actually aligning to the reported position.
+
+Below is a decision diagram for Count_reads_denovo_test.pl
+
+![Alt text](https://raw.github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/master/KSU_bioinfo_lab/count_diagram.png)
+
        
-       ![Alt text](https://raw.github.com/i5K-KINBRE-sc)
 
 USAGE
+
        perl script.pl [options]
         Documentation options:
           --help    brief help message
@@ -44,6 +52,7 @@ USAGE
           -o        output filename
 
 OPTIONS
+
        --help, -h
                Print a brief help message and exits.
 
@@ -76,13 +85,10 @@ DESCRIPTION
        used in the example workflow below but the script and example sam files
        can also be manually copied from github
 
-       **Test with sample datasets:**
+**Test with sample datasets:**
        
-       ```
 
-       $ git clone  https://github.com/i5K-KINBRE-script-share/RNA-
-
-       Seq-annotation-and-comparison
+       $ git clone  https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison
 
        $ cd RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/Count_reads_denovo
 
@@ -92,4 +98,3 @@ DESCRIPTION
        samples/sample1.sam,samples/sample2.sam,samples/sample3.sam --labels sample1,sample2,sample3
        --mapq 15 --out results/test
        
-       ```
