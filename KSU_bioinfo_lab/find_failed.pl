@@ -52,7 +52,6 @@ for my $xmlfile (@xmlfiles)
 	{
 		my $fasta;
 		$xmlfile =~ /(.*)(blasts\/)(.*)(_[0-9]*)\.xml/;
-		print "1: $1\n";
 		{
 			if ($1)
 			{
