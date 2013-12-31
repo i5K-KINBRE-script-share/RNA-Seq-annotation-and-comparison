@@ -29,6 +29,11 @@ USAGE: perl assembly_quality_stats_for_multiple_assemblies.pl [FASTA filename or
 USAGE: perl blastx.pl [FASTA filename]
 ```
 
+**find_failed.pl -** a package of scripts that find fasta sequences that have not been blasted (e.g. when a running blastx times out)
+
+```
+perl find_failed.pl -x [XML directory]
+```
 
 **Count_reads_denovo.pl** - This script takes sam files from Bowtie2 (one per biological or technical replicate) and outputs tab separated list where the first column is the name of the contig and the values are the read counts per sample (in the same order as you listed your sam files).
 
