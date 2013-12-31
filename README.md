@@ -23,7 +23,7 @@ KSU_bioinfo_lab
 USAGE: perl assembly_quality_stats_for_multiple_assemblies.pl [FASTA filename or filenames]
 ```
 
-**perl blastx.pl -** Script output fasta records split into files  of 1000 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands.
+**perl blastx.pl -** Script output fasta records split into files  of 100 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands.
 
 ```
 USAGE: perl blastx.pl [FASTA filename]
