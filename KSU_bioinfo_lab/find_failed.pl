@@ -29,7 +29,7 @@ print "#######################################################################\n
 ##################################################################################
 my $man = 0;
 my $help = 0;
-my $xml = "blasts";
+my $xml = "~/blasts";
 GetOptions (
 			  'help|?' => \$help, 
 			  'man' => \$man,   
@@ -38,7 +38,7 @@ GetOptions (
 or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
-open OUTPUT, '>', "$xml/unfinished";
+open OUTPUT, '>', "$xml/unfinished.fasta";
 ##################################################################################
 ##############                        run                       ##################
 ##################################################################################
@@ -74,7 +74,7 @@ for my $xmlfile (@xmlfiles)
 				my $blasted=`grep -c "<Iteration_query-def>${header}" $xmlfile`;
 				if ($blasted == 0)
 				{
-					print OUTPUT "${header}\n";
+					print OUTPUT ">${header}\n";
 					my $seqString = join '', @seqLines;
 					print OUTPUT "$seqString\n";
 				}
