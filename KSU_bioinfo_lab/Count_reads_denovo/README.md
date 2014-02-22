@@ -1,6 +1,6 @@
 SCRIPT
 
-**Count_reads_denovo_test.pl -**
+**Count_reads_denovo.pl -**
 This script takes sam files from Bowtie2
 (one per biological replicate) and outputs tab separated list where the
 first column is the name of the contig and the values are the read
@@ -39,7 +39,7 @@ Below is a decision diagram for Count_reads_denovo_test.pl
 
 USAGE
 
-       perl script.pl [options]
+       perl Count_reads_denovo.pl [options]
         Documentation options:
           --help    brief help message
           --man     full documentation
