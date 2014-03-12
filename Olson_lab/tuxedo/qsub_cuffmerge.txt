@@ -1,0 +1,9 @@
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cuffmerge_TNM.sh
+
+qsub -l h_rt=72:00:00,mem=10G,ib -pe single 10 ./run_cuffmerge_2TNM.sh
+
+qsub -l h_rt=72:00:00,mem=10G,ib -pe single 10 ./run_cuffmerge_3TNM.sh
+
+qsub -l h_rt=72:00:00,mem=10G,ib -pe single 10 ./run_cuffmerge_3TNM.sh
+
+qsub -l h_rt=24:00:00,mem=4G, run_cuffmerge_4TNM.sh

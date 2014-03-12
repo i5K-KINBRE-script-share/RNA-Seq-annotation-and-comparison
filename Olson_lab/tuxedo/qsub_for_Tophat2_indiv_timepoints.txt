@@ -1,0 +1,29 @@
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp1_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp2_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp3_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp4_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp5_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp6_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp7_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp8_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp9_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp10_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp11_TNM.sh
+
+qsub -l h_rt=144:00:00,mem=10G,ib -pe single 20 ./run_Tophat_map20_Xp12_TNM.sh
+
+
+
+
+qrsh -l h_rt=24:00:00,mem=10G,ib -pe single 10 ./run_Tophat_map20_Xp1_TNM.sh

@@ -1,0 +1,27 @@
+qsub -l h_rt=72:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp1_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp2_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp3_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp4_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp5_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp6_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp7_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp8_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp9_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp10_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp11_TNM.sh
+
+qsub -l h_rt=96:00:00,mem=10G,ib -pe single 20 ./run_cufflinks_Xp12_TNM.sh
+
+
+
+qrsh -l h_rt=24:00:00,mem=10G,ib -pe single 10 ./run_cufflinks_Xp1_TNM.sh
