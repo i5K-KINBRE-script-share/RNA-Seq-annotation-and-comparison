@@ -31,7 +31,7 @@ print "###########################################################\n";
 ###############################################################################
 ##############                get arguments                  ##################
 ###############################################################################
-my ($r_list,$project_name,$transcriptome);
+my ($r_list,$project_name,$transcriptome,$clean_read_file1,$clean_read_file2,@clean_r1,@clean_r2,$labels,$sams,$clean_read_singletons,$out_dir);
 my $convert_header = 0;
 my $mapq = 10;
 my $man = 0;
@@ -61,6 +61,27 @@ while (<READ_LIST>)
     chomp;
     push @reads , [split];
 }
+#######################################################################
+#########     Index the de novo transcriptome for Bowtie2    ##########
+#######################################################################
+close (SCRIPT);
+open (SCRIPT, '>', "${home}/${project_name}_scripts/${project_name}_index.sh") or die "Can't open ${home}/${project_name}_scripts/${project_name}_index.sh!\n"; # create a shell script for each read-pair set
+open (QSUBS_INDEX, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_index.txt") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_index.txt!\n";
+print SCRIPT '#!/bin/bash';
+print SCRIPT "\n";
+print SCRIPT "#######################################################################\n #########     Index the de novo transcriptome for Bowtie2    ##########\n#######################################################################\n";
+`cd $dirname`;
+print "DIRNAME: $dirname\n";
+`cd ../../read-cleaning-format-conversion/KSU_bioinfo_lab`;
+my $cleaning_dir = getcwd; # working directory (this is where output files will be printed)
+`cd $home`;
+print SCRIPT "perl ${cleaning_dir}/filter_by_length.pl $transcriptome
+# remove sequences shorer than 200bp from the reference transcriptome\n";
+my (${trans_filename}, ${trans_directories}, ${trans_suffix}) = fileparse($transcriptome,'\..*'); # break appart filenames
+print SCRIPT "/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2-build ${trans_directories}${trans_filename}_gt_200.${trans_suffix} ${trans_directories}${trans_filename}_gt_200\n";
+my $index="${trans_directories}${trans_filename}_gt_200";
+print QSUBS_INDEX "qsub -l mem=10G,h_rt=10:00:00 ${home}/${project_name}_scripts/${project_name}_index.sh\n";
+close (SCRIPT);
 ###############################################################################
 ##############     Write scripts for each sample             ##################
 ###############################################################################
@@ -76,16 +97,17 @@ for my $samples (@reads)
     #######################################################################
     ############ Convert headers of illumina paired-end data ##############
     #######################################################################
-    mkdir "${home}${project_name}_scripts";
-    mkdir "${home}${project_name}_qsubs";
-    mkdir "${home}${project_name}_prinseq";
-    open (QSUBS_CLEAN, '>', "${home}${project_name}_qsubs/${project_name}_qsubs_clean.txt") or die "Can't open ${home}${project_name}_qsubs/${project_name}_qsubs_clean.txt!\n";
-    open (QSUBS_MAP, '>', "${home}${project_name}_qsubs/${project_name}_qsubs_map.txt") or die "Can't open ${home}${project_name}_qsubs/${project_name}_qsubs_map.txt!\n";
+    mkdir "${home}/${project_name}_scripts";
+    mkdir "${home}/${project_name}_qsubs";
+    mkdir "${home}/${project_name}_prinseq";
+    open (QSUBS_CLEAN, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_clean.txt") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_clean.txt!\n";
+    open (QSUBS_MAP, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.txt") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.txt!\n";
     for my $file (0..$#r1)
     {
         my (${filename}, ${directories}, ${suffix}) = fileparse($r1[$file],'\..*'); # break appart filenames
         my (${filename2}, ${directories2}, ${suffix2}) = fileparse($r2[$file],'\..*'); # break appart filenames
-        open (SCRIPT, '>', "${home}${project_name}_scripts/${filename}_clean.sh") or die "Can't open ${home}${project_name}_scripts/${filename}_clean.sh!\n"; # create a shell script for each read-pair set
+        $out_dir = ${directories};
+        open (SCRIPT, '>', "${home}/${project_name}_scripts/${filename}_clean.sh") or die "Can't open ${home}/${project_name}_scripts/${filename}_clean.sh!\n"; # create a shell script for each read-pair set
         print SCRIPT '#!/bin/bash';
         print SCRIPT "\n";
         if ($convert_header)
@@ -93,31 +115,58 @@ for my $samples (@reads)
             print SCRIPT "#######################################################################\n############ Convert headers of illumina paired-end data ##############\n#######################################################################\n";
                 print SCRIPT "cat $r1[$file] | awk \'{if (NR % 4 == 1) {split(\$1, arr, \":\"); printf \"%s_%s:%s:%s:%s:%s#0/%s\\n\", arr[1], arr[3], arr[4], arr[5], arr[6], arr[7], substr(\$2, 1, 1), \$0} else if (NR % 4 == 3){print \"+\"} else {print \$0} }\' ${directories}${filename}_h.fastq\n";
                 $r1[$file] = "${directories}${filename}_header.fastq";
-                print SCRIPT "Convert headers of illumina paired-end data\n";
-                print SCRIPT "cat $r2[$file] | awk \'{if (NR % 4 == 1) {split(\$1, arr, \":\"); printf \"%s_%s:%s:%s:%s:%s#0/%s\\n\", arr[1], arr[3], arr[4], arr[5], arr[6], arr[7], substr(\$2, 1, 1), \$0} else if (NR % 4 == 3){print \"+\"} else {print \$0} }\' ${directories}${filename}_h.fastq\n";
-                $r2[$file] = "${directories}${filename}_header.fastq";
+                print SCRIPT "cat $r2[$file] | awk \'{if (NR % 4 == 1) {split(\$1, arr, \":\"); printf \"%s_%s:%s:%s:%s:%s#0/%s\\n\", arr[1], arr[3], arr[4], arr[5], arr[6], arr[7], substr(\$2, 1, 1), \$0} else if (NR % 4 == 3){print \"+\"} else {print \$0} }\' ${directories}${filename2}_h.fastq\n";
+                $r2[$file] = "${directories}${filename2}_header.fastq";
             
         }
         #######################################################################
         ######### Clean reads for low quality without de-duplicating ##########
         #######################################################################
         print SCRIPT "#######################################################################\n ######### Clean reads for low quality without de-duplicating ##########\n#######################################################################\n";
-        print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=40G ${home}${project_name}_scripts/${filename}_clean.sh\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq  $r1[$file] -fastq2  $r2[$file]-out_good null -graph_data ${home}${project_name}_prinseq/${filename}_raw.gd -out_bad null\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq  $r1[$file] -fastq2  $r2[$file] -min_len 90 -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3  -no_qual_header -log ${filename}_paired.log\ -graph_data ${home}${project_name}_prinseq/${filename}_cleaned.gd\n";
-
-        
-        #######################################################################
-        ######### Map reads to de novo transcriptome using Bowtie2   ##########
-        #######################################################################
-        print SCRIPT "#######################################################################\n ######### Map reads to de novo transcriptome using Bowtie2   ##########\n#######################################################################\n";
-#        my $insert size =160;
-#        print QSUBS_MAP "qsub -l h_rt=48:00:00,mem=2G -pe single 20 ${home}${project_name}_scripts/${filename}_map.sh\n";
+        print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=40G ${home}/${project_name}_scripts/${filename}_clean.sh\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq  $r1[$file] -fastq2  $r2[$file]-out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_bad null\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq  $r1[$file] -fastq2  $r2[$file] -min_len 90 -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3  -no_qual_header -log ${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned.gd -out_good ${directories}${filename}_good -out_bad ${directories}${filename}_bad\n";
+        $clean_read_file1 = "$clean_read_file1"." ${directories}${filename}_good_1_singletons.fastq";
+        $clean_read_file2 = "$clean_read_file2"." ${directories}${filename}_good_2_singletons.fastq";
+        $clean_read_singletons = "$clean_read_singletons". "${directories}${filename}_good_1_singletons.fastq ${directories}${filename}_good_2_singletons.fastq";
     }
+    #######################################################################
+    ######### Map reads to de novo transcriptome using Bowtie2   ##########
+    #######################################################################
+    close (SCRIPT);
+    open (SCRIPT, '>', "${home}/${project_name}_scripts/$samples->[0]_map.sh") or die "Can't open ${home}/${project_name}_scripts/$samples->[0]_map.sh!\n"; # create a shell script for each read-pair set
+    open (QSUBS_MAP, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.txt") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.txt!\n";
+    print SCRIPT '#!/bin/bash';
+    print SCRIPT "\n";
+    print SCRIPT "#######################################################################\n ######### Map reads to de novo transcriptome using Bowtie2   ##########\n#######################################################################\n";
+    print SCRIPT "cat$clean_read_file1 > ${out_dir}$samples->[0]_good_1.fastq # concatenate single fasta\n";
+    print SCRIPT "cat$clean_read_file2 > ${out_dir}$samples->[0]_good_2.fastq # concatenate single fasta\n";
+    print SCRIPT "cat$clean_read_singletons > ${out_dir}$samples->[0]_good_singletons.fastq # concatenate single fasta\n";
+    print SCRIPT "/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2 -p 20 --fr -q -x $index -1 ${out_dir}$samples->[0]_good_1.fastq -2 ${out_dir}$samples->[0]_good_2.fastq -U ${out_dir}$samples->[0]_good_singletons.fastq -S ${out_dir}$samples->[0]_200.sam\n";
+    if ($labels ne '')
+    {
+        $sams = "$sams".",${out_dir}$samples->[0]_200.sam";
+        $labels  = "$labels".",$samples->[0]";
+    }
+    else
+    {
+        $sams = "${out_dir}$samples->[0]_200.sam";
+        $labels  = "$samples->[0]";
+    }
+    print QSUBS_MAP "qsub -l h_rt=72:00:00,mem=2G -pe single 20 ${home}/${project_name}_scripts/$samples->[0]_map.sh\n";
+    
 }
-
-#            print ARRAY_CONTENTS join("\t", @cols_for_row), "\n";
-
+#######################################################################
+#########                Summarize read counts               ##########
+#######################################################################
+close (SCRIPT);
+open (SCRIPT, '>', "${home}/${project_name}_scripts/${project_name}_count.sh") or die "Can't open ${home}/${project_name}_scripts/${project_name}_count.sh!\n"; # create a shell script
+open (QSUBS_COUNT, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_count.txt") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_count.txt!\n";
+print SCRIPT '#!/bin/bash';
+print SCRIPT "\n";
+print SCRIPT "#######################################################################\n #########                Summarize read counts               ##########\n#######################################################################\n";
+print SCRIPT "perl ${out_dir}Count_reads_denovo/Count_reads_denovo.pl -s $sams -l $labels -m $mapq -o ${out_dir}${project_name}_read_counts.txt\n";
+print QSUBS_COUNT "qsub -l h_rt=8:00:00 ${home}/${project_name}_scripts/${project_name}_count.sh\n";   
 print "done\n";
 ###############################################################################
 ##############                  Documentation                ##################
