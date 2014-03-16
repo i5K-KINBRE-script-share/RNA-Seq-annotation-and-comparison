@@ -128,18 +128,20 @@ for my $samples (@reads)
         #######################################################################
         print SCRIPT "#######################################################################\n ######### Clean reads for low quality without de-duplicating ##########\n#######################################################################\n";
         print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=40G ${home}/${project_name}_scripts/${filename}_clean.sh\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_bad null\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len 90 -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned.gd -out_good ${directories}${filename}_good -out_bad ${directories}${filename}_bad\n";
+#        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len 90 -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${directories}${filename}_good -out_bad ${directories}${filename}_bad\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1.fastq -fastq2 ${directories}${filename}_good_2.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned.gd -out_bad null\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_1_singletons.gd -out_bad null\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_2_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_2_singletons.gd -out_bad null\n";
         if ($clean_read_file1)
         {
-            $clean_read_file1 = "$clean_read_file1"." ${directories}${filename}_good_1_singletons.fastq";
-            $clean_read_file2 = "$clean_read_file2"." ${directories}${filename}_good_2_singletons.fastq";
-            $clean_read_singletons = "$clean_read_singletons". "$ {directories}${filename}_good_1_singletons.fastq ${directories}${filename}_good_2_singletons.fastq";
+            $clean_read_file1 = "$clean_read_file1"." ${directories}${filename}_good_1.fastq";
+            $clean_read_file2 = "$clean_read_file2"." ${directories}${filename}_good_2.fastq";
+            $clean_read_singletons = "$clean_read_singletons". " ${directories}${filename}_good_1_singletons.fastq ${directories}${filename}_good_2_singletons.fastq";
         }
         else
         {
-            $clean_read_file1 = " ${directories}${filename}_good_1_singletons.fastq";
-            $clean_read_file2 = " ${directories}${filename}_good_2_singletons.fastq";
+            $clean_read_file1 = " ${directories}${filename}_good_1.fastq";
+            $clean_read_file2 = " ${directories}${filename}_good_2.fastq";
             $clean_read_singletons = " ${directories}${filename}_good_1_singletons.fastq ${directories}${filename}_good_2_singletons.fastq";
         }
     }
