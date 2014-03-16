@@ -258,7 +258,7 @@ The minimum MAPQ. Alignments with less than a 1 in 10 chance of
 
 B<RUN DETAILS:>
 
- This appears when the manual is viewed!!!!The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script 
+ The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script 
  
  1) converts illumina headers if the "-c" parameter is used
  2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html. Prinseq parameters can be customized by editing line 126. Prinseq parameters in detail: 
