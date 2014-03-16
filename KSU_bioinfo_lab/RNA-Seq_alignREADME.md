@@ -1,5 +1,6 @@
 SYNOPSIS
-       RNA-Seq_align.pl - The script writes scripts and qsubs to generate
+
+RNA-Seq_align.pl - The script writes scripts and qsubs to generate
        count summaries for illumina paired end reads after mapping against a
        de novo transcriptome. The script 1) converts illumina headers if the
        "-c" parameter is used, 2) cleans raw reads using Prinseq
@@ -15,9 +16,10 @@ SYNOPSIS
        https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/tree/master/KSU_bioinfo_lab/Count_reads_denovo
        for details on how reads are summarized.
 
-       For examples parameter details run "perl RNA-Seq_align.pl -man".
+For examples parameter details run "perl RNA-Seq_align.pl -man".
 
 USAGE
+
        perl RNA-Seq_align.pl [options]
        
        Documentation options:
@@ -33,6 +35,7 @@ USAGE
           -c        convert fastq headers
 
 OPTIONS
+
        -help   Print a brief help message and exits.
 
        -man    Prints the more detailed manual page with output details and
@@ -67,12 +70,15 @@ OPTIONS
                 default. This is a minimum MAPQ of 10.
 
 DESCRIPTION
-       RUN DETAILS:
 
-        This appears when the manual is viewed!!!!The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script
+RUN DETAILS:
 
-        1) converts illumina headers if the "-c" parameter is used
-        2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html. Prinseq parameters can be customized by editing line 126. Prinseq parameters in detail:
+The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script
+
+1) converts illumina headers if the "-c" parameter is used. Most bioinformatics software was developed for older illumina paired end headers therefore if your headers don't end in /1 or /2 you will need to use this parameter
+
+2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html. Prinseq parameters can be customized by editing line 126. Prinseq parameters in detail:
+
            -min_len 90
            -min_qual_mean 25
            -trim_qual_type mean
@@ -87,11 +93,13 @@ DESCRIPTION
            -lc_method entropy
            -lc_threshold 70
 
-        3) creates a filtered transcriptome fasta file with putative transcripts less than 200 bp long removed and then indexes this transcriptome for mapping
-        4) reads are then mapped to the length filtered de novo transcriptome using Bowtie2 in the best mapping default mode, read more about Bowtie2 at http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml
-        5) count summaries are generated as a tab separated list where the first row is the sample ids and the first column is the name of the contig and the other values are the read counts per sample, see https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/tree/master/KSU_bioinfo_lab/Count_reads_denovo for details on how reads are summarized. This file can be used as input for DeSeq or EdgeR.
+3) creates a filtered transcriptome fasta file with putative transcripts less than 200 bp long removed and then indexes this transcriptome for mapping
 
-       Test with sample datasets:
+4) reads are then mapped to the length filtered de novo transcriptome using Bowtie2 in the best mapping default mode, read more about Bowtie2 at http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml
+
+5) count summaries are generated as a tab separated list where the first row is the sample ids and the first column is the name of the contig and the other values are the read counts per sample, see https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/tree/master/KSU_bioinfo_lab/Count_reads_denovo for details on how reads are summarized. This file can be used as input for DeSeq or EdgeR.
+
+Test with sample datasets:
 
         # log into Beocat
 
