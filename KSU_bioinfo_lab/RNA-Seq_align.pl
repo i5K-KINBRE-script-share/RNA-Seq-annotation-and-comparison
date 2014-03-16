@@ -74,14 +74,14 @@ print QSUBS_INDEX '#!/bin/bash';
 print QSUBS_INDEX "\n";
 print SCRIPT '#!/bin/bash';
 print SCRIPT "\n";
-print SCRIPT "#######################################################################\n #########     Index the de novo transcriptome for Bowtie2    ##########\n#######################################################################\n";
+print SCRIPT "#######################################################################\n#########     Index the de novo transcriptome for Bowtie2    ##########\n#######################################################################\n";
 $dirname =~ /(.*)\/RNA-Seq-annotation-and-comparison\/KSU_bioinfo_lab/;
 my $git_dir = $1;
 print "GITDIR: $git_dir\n";
 print SCRIPT "perl ${git_dir}/read-cleaning-format-conversion/KSU_bioinfo_lab/filter_by_length.pl $transcriptome
 # remove sequences shorer than 200bp from the reference transcriptome\n";
 my (${trans_filename}, ${trans_directories}, ${trans_suffix}) = fileparse($transcriptome,'\..*'); # break appart filenames
-print SCRIPT "/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2-build ${trans_directories}${trans_filename}_gt_200.${trans_suffix} ${trans_directories}${trans_filename}_gt_200\n";
+print SCRIPT "/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2-build ${trans_directories}${trans_filename}_gt_200.fasta ${trans_directories}${trans_filename}_gt_200\n";
 my $index="${trans_directories}${trans_filename}_gt_200";
 print QSUBS_INDEX "qsub -l mem=10G,h_rt=10:00:00 ${home}/${project_name}_scripts/${project_name}_index.sh\n";
 close (SCRIPT);
@@ -126,7 +126,7 @@ for my $samples (@reads)
         #######################################################################
         ######### Clean reads for low quality without de-duplicating ##########
         #######################################################################
-        print SCRIPT "#######################################################################\n ######### Clean reads for low quality without de-duplicating ##########\n#######################################################################\n";
+        print SCRIPT "#######################################################################\n######### Clean reads for low quality without de-duplicating ##########\n#######################################################################\n";
         print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=40G ${home}/${project_name}_scripts/${filename}_clean.sh\n";
         print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len 90 -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${directories}${filename}_good -out_bad ${directories}${filename}_bad\n";
         print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1.fastq -fastq2 ${directories}${filename}_good_2.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned.gd -out_bad null\n";
@@ -155,7 +155,7 @@ for my $samples (@reads)
     print QSUBS_MAP "\n";
     print SCRIPT '#!/bin/bash';
     print SCRIPT "\n";
-    print SCRIPT "#######################################################################\n ######### Map reads to de novo transcriptome using Bowtie2   ##########\n#######################################################################\n";
+    print SCRIPT "#######################################################################\n######### Map reads to de novo transcriptome using Bowtie2   ##########\n#######################################################################\n";
     print SCRIPT "cat$clean_read_file1 > ${out_dir}$samples->[0]_good_1.fastq # concatenate single fasta\n";
     print SCRIPT "cat$clean_read_file2 > ${out_dir}$samples->[0]_good_2.fastq # concatenate single fasta\n";
     print SCRIPT "cat$clean_read_singletons > ${out_dir}$samples->[0]_good_singletons.fastq # concatenate single fasta\n";
@@ -183,7 +183,7 @@ print QSUBS_COUNT '#!/bin/bash';
 print QSUBS_COUNT "\n";
 print SCRIPT '#!/bin/bash';
 print SCRIPT "\n";
-print SCRIPT "#######################################################################\n #########                Summarize read counts               ##########\n#######################################################################\n";
+print SCRIPT "#######################################################################\n#########                Summarize read counts               ##########\n#######################################################################\n";
 print SCRIPT "perl ${dirname}/Count_reads_denovo/Count_reads_denovo.pl -s $sams -l $labels -m $mapq -o ${out_dir}${project_name}_read_counts.txt\n";
 print QSUBS_COUNT "qsub -l h_rt=8:00:00 ${home}/${project_name}_scripts/${project_name}_count.sh\n";   
 print "done\n";
@@ -291,6 +291,7 @@ B<Test with sample datasets:>
  perl RNA-Seq_align.pl -r sample_data/sample.txt -t sample_data/sample_transcriptome.fasta -p test -c
  bash test_qsubs_clean.sh
  ## When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
+ ## download the ".gd" files in the Project_name_prinseq directory and upload them to http://edwards.sdsu.edu/cgi-bin/prinseq/prinseq.cgi?report=1 to evaluate read quality pre and post cleaning
  bash test_qsubs_index.sh
  ## When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
  bash test_qsubs_map.sh
