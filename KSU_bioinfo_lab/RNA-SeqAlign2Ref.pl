@@ -154,7 +154,7 @@ for my $samples (@reads)
     print QSUBS_MAP '#!/bin/bash';
     print QSUBS_MAP "\n";
     print SCRIPT "#!/bin/bash\n";
-    print SCRIPT "export PATH=$PATH:/homes/bjsco/bin\n";
+    print SCRIPT "export PATH=\$PATH:/homes/bjsco/bin\n";
     print SCRIPT "#######################################################################\n######### Align the RNA-seq reads to the genome with Tophat2 ##########\n#######################################################################\n";
     print SCRIPT "cat$clean_read_file1 > ${out_dir}$samples->[0]_good_1.fastq # concatenate single fasta\n";
     print SCRIPT "cat$clean_read_file2 > ${out_dir}$samples->[0]_good_2.fastq # concatenate single fasta\n";
