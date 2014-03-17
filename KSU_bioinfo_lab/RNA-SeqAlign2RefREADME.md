@@ -75,5 +75,7 @@ Map cleaned reads to hg19. When these jobs are complete go to next step. Test co
 
     bash ~/test_git/human19_qsubs/human19_qsubs_map.sh
  
+Merge the assembled transcripts with Cuffmerge and estimate differential expression with Cuffdiff2.
+
     bash ~/test_git/human19_qsubs/human19_qsubs_merge.sh
 
