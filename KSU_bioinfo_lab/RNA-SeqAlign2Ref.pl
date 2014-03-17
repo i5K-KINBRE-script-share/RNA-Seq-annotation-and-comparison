@@ -31,8 +31,9 @@ print "###########################################################\n";
 ###############################################################################
 ##############                get arguments                  ##################
 ###############################################################################
-my ($r_list,$project_name,$transcriptome,$clean_read_file1,$clean_read_file2,@clean_r1,@clean_r2,$labels,$sams,$clean_read_singletons,$out_dir,$gtf);
+my ($r_list,$project_name,$genome,$clean_read_file1,$clean_read_file2,@clean_r1,@clean_r2,$labels,$sams,$clean_read_singletons,$out_dir,$gtf);
 my $convert_header = 0;
+my $min_len=40;
 my $mapq = 10;
 my $man = 0;
 my $help = 0;
@@ -40,11 +41,12 @@ GetOptions (
 			  'help|?' => \$help, 
 			  'man' => \$man,
 			  'r|r_list:s' => \$r_list,
-			  't|transcriptome:s' => \$transcriptome,
+			  'f|genome_fasta:s' => \$genome,
               'p|project_name:s' => \$project_name,
 			  'c|convert_header' => \$convert_header,
 			  'm|mapq:i' => \$mapq,
 			  'g|GTF_GFF:s' => \$gtf
+			  'l|min_len:s' => \$min_len
               )  
 or pod2usage(2);
 pod2usage(1) if $help;
@@ -78,9 +80,7 @@ print SCRIPT "##################################################################
 $dirname =~ /(.*)\/RNA-Seq-annotation-and-comparison\/KSU_bioinfo_lab/;
 my $git_dir = $1;
 print "GITDIR: $git_dir\n";
-print SCRIPT "perl ${git_dir}/read-cleaning-format-conversion/KSU_bioinfo_lab/filter_by_length.pl $transcriptome
-# remove sequences shorer than 200bp from the reference transcriptome\n";
-my (${genome_filename}, ${genome_directories}, ${genome_suffix}) = fileparse($transcriptome,'\..*'); # break appart filenames
+my (${genome_filename}, ${genome_directories}, ${genome_suffix}) = fileparse($genome,'\..*'); # break appart filenames
 print SCRIPT "/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2-build ${genome_directories}${genome_filename}.fasta ${genome_directories}${genome_filename}\n";
 my $index="${genome_directories}${genome_filename}";
 print QSUBS_INDEX "qsub -l mem=10G,h_rt=10:00:00 ${home}/${project_name}_scripts/${project_name}_index.sh\n";
@@ -100,10 +100,10 @@ for my $samples (@reads)
     #######################################################################
     ############ Convert headers of illumina paired-end data ##############
     #######################################################################
-    open (QSUBS_CLEAN, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_clean.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_clean.sh!\n";
+    open (QSUBS_CLEAN, '>>', "${home}/${project_name}_qsubs/${project_name}_qsubs_clean.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_clean.sh!\n";
     print QSUBS_CLEAN '#!/bin/bash';
     print QSUBS_CLEAN "\n";
-    open (QSUBS_MAP, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh!\n";
+    open (QSUBS_MAP, '>>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh!\n";
     print QSUBS_MAP '#!/bin/bash';
     print QSUBS_MAP "\n";
     for my $file (0..$#r1)
@@ -128,7 +128,7 @@ for my $samples (@reads)
         #######################################################################
         print SCRIPT "#######################################################################\n######### Clean reads for low quality without de-duplicating ##########\n#######################################################################\n";
         print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=40G ${home}/${project_name}_scripts/${filename}_clean.sh\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len 90 -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${directories}${filename}_good -out_bad ${directories}${filename}_bad\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len $min_len -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${directories}${filename}_good -out_bad ${directories}${filename}_bad\n";
         print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1.fastq -fastq2 ${directories}${filename}_good_2.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned.gd -out_bad null\n";
         print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_1_singletons.gd -out_bad null\n";
         print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_2_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_2_singletons.gd -out_bad null\n";
@@ -150,7 +150,7 @@ for my $samples (@reads)
     #######################################################################
     close (SCRIPT);
     open (SCRIPT, '>', "${home}/${project_name}_scripts/$samples->[0]_map.sh") or die "Can't open ${home}/${project_name}_scripts/$samples->[0]_map.sh!\n"; # create a shell script for each read-pair set
-    open (QSUBS_MAP, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh!\n";
+    open (QSUBS_MAP, '>>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh!\n";
     print QSUBS_MAP '#!/bin/bash';
     print QSUBS_MAP "\n";
     print SCRIPT "#!/bin/bash\n";
@@ -159,9 +159,8 @@ for my $samples (@reads)
     print SCRIPT "cat$clean_read_file1 > ${out_dir}$samples->[0]_good_1.fastq # concatenate single fasta\n";
     print SCRIPT "cat$clean_read_file2 > ${out_dir}$samples->[0]_good_2.fastq # concatenate single fasta\n";
     print SCRIPT "cat$clean_read_singletons > ${out_dir}$samples->[0]_good_singletons.fastq # concatenate single fasta\n";
-    print SCRIPT "mkdir ${out_dir}/tophat2_output\n";
-    print SCRIPT "/homes/bjsco/bin/tophat2 -p 20 -g 20 -o ${out_dir}/tophat2_output -G $gtf $index ${out_dir}$samples->[0]_good_1.fastq ${out_dir}$samples->[0]_good_2.fastq,${out_dir}$samples->[0]_good_singletons.fastq\n";
-    print SCRIPT "/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2 -p 20 --fr -q -x $index -1 ${out_dir}$samples->[0]_good_1.fastq -2 ${out_dir}$samples->[0]_good_2.fastq -U ${out_dir}$samples->[0]_good_singletons.fastq -S ${out_dir}$samples->[0].sam\n";
+    print SCRIPT "mkdir ${out_dir}tophat2_output\n";
+    print SCRIPT "/homes/bjsco/bin/tophat2 -p 20 -g 20 -o ${out_dir}tophat2_output -G $gtf $index ${out_dir}$samples->[0]_good_1.fastq ${out_dir}$samples->[0]_good_2.fastq,${out_dir}$samples->[0]_good_singletons.fastq\n";
 #    if ($labels)
 #    {
 #        $sams = "$sams".",${out_dir}$samples->[0].sam";
@@ -172,7 +171,7 @@ for my $samples (@reads)
 #        $sams = "${out_dir}$samples->[0].sam";
 #        $labels  = "$samples->[0]";
 #    }
-#    print QSUBS_MAP "qsub -l h_rt=48:00:00,mem=2G -pe single 20 ${home}/${project_name}_scripts/$samples->[0]_map.sh\n";
+    print QSUBS_MAP "qsub -l h_rt=48:00:00,mem=2G -pe single 20 ${home}/${project_name}_scripts/$samples->[0]_map.sh\n";
     
 }
 #######################################################################
