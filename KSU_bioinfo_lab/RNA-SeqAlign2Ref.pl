@@ -186,8 +186,8 @@ open (SCRIPT, '>', "${home}/${project_name}_scripts/${project_name}_merge.sh") o
 open (QSUBS_MERGE, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_merge.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_merge.sh!\n";
 print QSUBS_MERGE "#!/bin/bash\n";
 print SCRIPT "#!/bin/bash\n";
-print SCRIPT "export PATH=$PATH:/homes/bjsco/cufflinks-2.1.1.Linux_x86_64/cuffmerge\n";
-print SCRIPT "export PATH=$PATH:/homes/bjsco/bin\n";
+print SCRIPT "export PATH=\$PATH:/homes/bjsco/cufflinks-2.1.1.Linux_x86_64/cuffmerge\n";
+print SCRIPT "export PATH=\$PATH:/homes/bjsco/bin\n";
 print SCRIPT "#######################################################################\n#####          Merge these assemblies with Cuffmerge            #######\n#######################################################################\n";
 print SCRIPT "mkdir ${out_dir}merge\n";
 print SCRIPT "mkdir ${out_dir}diff\n";
