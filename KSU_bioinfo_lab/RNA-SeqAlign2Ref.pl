@@ -44,7 +44,7 @@ GetOptions (
               'p|project_name:s' => \$project_name,
 			  'c|convert_header' => \$convert_header,
 			  'm|mapq:i' => \$mapq,
-			  'g|GTF/GFF:s' => \$gtf
+			  'g|GTF_GFF:s' => \$gtf
               )  
 or pod2usage(2);
 pod2usage(1) if $help;
