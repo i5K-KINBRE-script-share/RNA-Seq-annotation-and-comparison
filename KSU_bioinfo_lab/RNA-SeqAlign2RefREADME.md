@@ -74,5 +74,6 @@ Download the ".gd" files in the "~/test_git/human19_prinseq" directory and uploa
 Map cleaned reads to hg19. When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
 
     bash ~/test_git/human19_qsubs/human19_qsubs_map.sh
-
  
+    bash ~/test_git/human19_qsubs/human19_qsubs_merge.sh
+

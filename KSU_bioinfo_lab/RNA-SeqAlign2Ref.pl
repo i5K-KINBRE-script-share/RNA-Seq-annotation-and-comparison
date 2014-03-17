@@ -1,6 +1,6 @@
 #!/bin/perl
 ###############################################################################
-#   
+#
 #	USAGE: perl RNA-SeqAlign2Ref.pl [options]
 #
 #  Created by jennifer shelton
@@ -38,15 +38,15 @@ my $min_len=40;
 my $man = 0;
 my $help = 0;
 GetOptions (
-			  'help|?' => \$help, 
-			  'man' => \$man,
-			  'r|r_list:s' => \$r_list,
-			  'f|genome_fasta:s' => \$genome,
-              'p|project_name:s' => \$project_name,
-			  'c|convert_header' => \$convert_header,
-			  'g|GTF_GFF:s' => \$gtf,
-			  'l|min_len:s' => \$min_len
-              )  
+'help|?' => \$help,
+'man' => \$man,
+'r|r_list:s' => \$r_list,
+'f|genome_fasta:s' => \$genome,
+'p|project_name:s' => \$project_name,
+'c|convert_header' => \$convert_header,
+'g|GTF_GFF:s' => \$gtf,
+'l|min_len:s' => \$min_len
+)
 or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -116,10 +116,10 @@ for my $samples (@reads)
         if ($convert_header)
         {
             print SCRIPT "#######################################################################\n############ Convert headers of illumina paired-end data ##############\n#######################################################################\n";
-                print SCRIPT "cat $r1[$file] | awk \'{if (NR % 4 == 1) {split(\$1, arr, \":\"); printf \"%s_%s:%s:%s:%s:%s#0/%s\\n\", arr[1], arr[3], arr[4], arr[5], arr[6], arr[7], substr(\$2, 1, 1), \$0} else if (NR % 4 == 3){print \"+\"} else {print \$0} }\' > ${directories}${filename}_header.fastq\n";
-                $r1[$file] = "${directories}${filename}_header.fastq";
-                print SCRIPT "cat $r2[$file] | awk \'{if (NR % 4 == 1) {split(\$1, arr, \":\"); printf \"%s_%s:%s:%s:%s:%s#0/%s\\n\", arr[1], arr[3], arr[4], arr[5], arr[6], arr[7], substr(\$2, 1, 1), \$0} else if (NR % 4 == 3){print \"+\"} else {print \$0} }\' > ${directories}${filename2}_header.fastq\n";
-                $r2[$file] = "${directories}${filename2}_header.fastq";
+            print SCRIPT "cat $r1[$file] | awk \'{if (NR % 4 == 1) {split(\$1, arr, \":\"); printf \"%s_%s:%s:%s:%s:%s#0/%s\\n\", arr[1], arr[3], arr[4], arr[5], arr[6], arr[7], substr(\$2, 1, 1), \$0} else if (NR % 4 == 3){print \"+\"} else {print \$0} }\' > ${directories}${filename}_header.fastq\n";
+            $r1[$file] = "${directories}${filename}_header.fastq";
+            print SCRIPT "cat $r2[$file] | awk \'{if (NR % 4 == 1) {split(\$1, arr, \":\"); printf \"%s_%s:%s:%s:%s:%s#0/%s\\n\", arr[1], arr[3], arr[4], arr[5], arr[6], arr[7], substr(\$2, 1, 1), \$0} else if (NR % 4 == 3){print \"+\"} else {print \$0} }\' > ${directories}${filename2}_header.fastq\n";
+            $r2[$file] = "${directories}${filename2}_header.fastq";
             
         }
         #######################################################################
@@ -163,7 +163,7 @@ for my $samples (@reads)
     print SCRIPT "/homes/bjsco/bin/tophat2 -p 20 -g 20 -o ${out_dir}$samples->[0]_tophat2_out -G $gtf $index ${out_dir}$samples->[0]_good_1.fastq ${out_dir}$samples->[0]_good_2.fastq,${out_dir}$samples->[0]_good_singletons.fastq\n"; # map reads with tophat
     print SCRIPT "#######################################################################\n#####  Assemble expressed genes and transcripts with Cufflinks2 #######\n#######################################################################\n";
     print SCRIPT "/homes/bjsco/bin/cufflinks -o ${out_dir}$samples->[0]_tophat2_out -G $gtf -N  ${out_dir}$samples->[0]_tophat2_out/accepted_hits.bam\n"; #run cufflinks to assemble each transcript
-    open (ASSEMBLED_TRANSCRIPTS, '>>', "${out_dir}assemblies.txt") or die "can't open ${out_dir}assemblies.txt\n"; #create cufflinks assembled transcript gtf list file
+    open (ASSEMBLED_TRANSCRIPTS, '>>', "${home}/assemblies.txt") or die "can't open ${home}/assemblies.txt: $!"; #create cufflinks assembled transcript gtf list file
     print ASSEMBLED_TRANSCRIPTS "${out_dir}$samples->[0]_tophat2_out/transcripts.gtf\n";
     
     if ($sams{$samples->[3]})
@@ -206,7 +206,7 @@ for my $treatment_name (keys %sams)
     {
         $L_final = "$treatment_name";
         $sam_final = "$sams{$treatment_name}";
-
+        
     }
 }
 print SCRIPT "$L_final $sam_final\n";
@@ -216,105 +216,105 @@ print "done\n";
 ###############################################################################
 ##############                  Documentation                ##################
 ###############################################################################
-## style adapted from http://www.perlmonks.org/?node_id=489861 
+## style adapted from http://www.perlmonks.org/?node_id=489861
 __END__
 
 =head1 SYNOPSIS
-
-RNA-SeqAlign2Ref.pl - The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a reference genome. The script 1) converts illumina headers if the "-c" parameter is used, 2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html, 3) index the reference genome for mapping, 4) reads are aligned to the genome with Tophat2 (read more about Tophat2 at http://tophat.cbcb.umd.edu/manual.html) and expressed genes and transcripts are assembled with Cufflinks2, 5) these assemblies are merged with Cuffmerge and differential expression is estimated with Cuffdiff2.
  
-For examples parameter details run "perl RNA-SeqAlign2Ref.pl -man". 
-
-=head1 USAGE
-
-perl RNA-SeqAlign2Ref.pl [options]
-
+ RNA-SeqAlign2Ref.pl - The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a reference genome. The script 1) converts illumina headers if the "-c" parameter is used, 2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html, 3) index the reference genome for mapping, 4) reads are aligned to the genome with Tophat2 (read more about Tophat2 at http://tophat.cbcb.umd.edu/manual.html) and expressed genes and transcripts are assembled with Cufflinks2, 5) these assemblies are merged with Cuffmerge and differential expression is estimated with Cuffdiff2.
+ 
+ For examples parameter details run "perl RNA-SeqAlign2Ref.pl -man".
+ 
+ =head1 USAGE
+ 
+ perl RNA-SeqAlign2Ref.pl [options]
+ 
  Documentation options:
-   -help    brief help message
-   -man	    full documentation
+ -help    brief help message
+ -man	    full documentation
  Required options:
-   -r	     filename for file with tab separated list of sample labels, fastq files, and treatment labels
-   -f	     filename of the reference genome fasta
-   -p	     project name (no spaces)
-   -g	     filename of the gtf or gff genome annotation
+ -r	     filename for file with tab separated list of sample labels, fastq files, and treatment labels
+ -f	     filename of the reference genome fasta
+ -p	     project name (no spaces)
+ -g	     filename of the gtf or gff genome annotation
  Filtering options:
-   -l	     minimum read length
+ -l	     minimum read length
  Fastq format options:
-   -c	     convert fastq headers
-    
-
-=head1 OPTIONS
-
-=over 8
-
-=item B<-help>
-
-Print a brief help message and exits. 
-
-=item B<-man>
-
-Prints the more detailed manual page with output details and examples and exits.
+ -c	     convert fastq headers
  
-=item B<-r, --r_list>
-
-The filename of the user provided list of sample labels, read files, and treatment labels. Each line should be tab separated with the sample label (no spaces), then the first read file, then the second read file, then the treatment label (no spaces). Example:
+ 
+ =head1 OPTIONS
+ 
+ =over 8
+ 
+ =item B<-help>
+ 
+ Print a brief help message and exits.
+ 
+ =item B<-man>
+ 
+ Prints the more detailed manual page with output details and examples and exits.
+ 
+ =item B<-r, --r_list>
+ 
+ The filename of the user provided list of sample labels, read files, and treatment labels. Each line should be tab separated with the sample label (no spaces), then the first read file, then the second read file, then the treatment label (no spaces). Example:
  brain_rep_1	~/test_git/Galaxy4-brain_1.fastq	~/test_git/Galaxy5-brain_2.fastq	treatment_brain
  adrenal_rep_1	~/test_git/Galaxy2-adrenal_1.fastq	~/test_git/Galaxy3-adrenal_2.fastq	treatment_adrenal
  brain_rep_2	~/test_git/Galaxy4-brain_1.fastq	~/test_git/Galaxy5-brain_2.fastq	treatment_brain
  adrenal_rep_2	~/test_git/Galaxy2-adrenal_1.fastq	~/test_git/Galaxy3-adrenal_2.fastq	treatment_adrenal
-
-=item B<-f, --genome_fasta>
  
-The filename of the user provided reference genome fasta.
+ =item B<-f, --genome_fasta>
  
-=item B<-g, --GTF_GFF>
+ The filename of the user provided reference genome fasta.
  
-The filename of the user provided reference genome annotation gtf or gff file.
-
-=item B<-p, --project_name>
-
-The name of the project (no spaces). This will be used in filenaming.
+ =item B<-g, --GTF_GFF>
  
-=item B<-c, --convert_header>
+ The filename of the user provided reference genome annotation gtf or gff file.
  
-If the illumina headers do not end in /1 or /2 use this parameter to indicat that headers need to be converted. Check your headers by typing "head [fasta filename]" and read more about illumina headers at http://en.wikipedia.org/wiki/Fastq#Illumina_sequence_identifiers.
+ =item B<-p, --project_name>
  
-=item B<-l, --min_len>
+ The name of the project (no spaces). This will be used in filenaming.
  
-The minimum read length. Reads shorter than this after cleaning will be discarded. Default minimum length is 40bp.
-
-=back
-
-=head1 DESCRIPTION
-
-B<RUN DETAILS:>
-
- The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script 
+ =item B<-c, --convert_header>
+ 
+ If the illumina headers do not end in /1 or /2 use this parameter to indicat that headers need to be converted. Check your headers by typing "head [fasta filename]" and read more about illumina headers at http://en.wikipedia.org/wiki/Fastq#Illumina_sequence_identifiers.
+ 
+ =item B<-l, --min_len>
+ 
+ The minimum read length. Reads shorter than this after cleaning will be discarded. Default minimum length is 40bp.
+ 
+ =back
+ 
+ =head1 DESCRIPTION
+ 
+ B<RUN DETAILS:>
+ 
+ The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script
  
  1) converts illumina headers if the "-c" parameter is used
  2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html. Prinseq parameters can be customized by editing line 130. Prinseq parameters in detail:
-    -min_len 40
-    -min_qual_mean 25
-    -trim_qual_type mean
-    -trim_qual_rule lt
-    -trim_qual_window 2
-    -trim_qual_step 1
-    -trim_qual_left 20
-    -trim_qual_right 20
-    -ns_max_p 1
-    -trim_ns_left 5
-    -trim_ns_right 5
-    -lc_method entropy
-    -lc_threshold 70
-
+ -min_len 40
+ -min_qual_mean 25
+ -trim_qual_type mean
+ -trim_qual_rule lt
+ -trim_qual_window 2
+ -trim_qual_step 1
+ -trim_qual_left 20
+ -trim_qual_right 20
+ -ns_max_p 1
+ -trim_ns_left 5
+ -trim_ns_right 5
+ -lc_method entropy
+ -lc_threshold 70
+ 
  3) indexes the reference genome for mapping
  4) reads are aligned to the genome with Tophat2 (read more about Tophat2 at http://tophat.cbcb.umd.edu/manual.html) and expressed genes and transcripts are assembled with Cufflinks2 (read more about the Cuffdiff2 alogoritm in their publication http://bioinformaticsk-state.blogspot.com/2013/04/cuffdiff-2-and-isoform-abundance.html)
  5) these assemblies are merged with Cuffmerge and differential expression is estimated with Cuffdiff2
-
-B<Test with sample datasets:>
+ 
+ B<Test with sample datasets:>
  
  # log into Beocat
-
+ 
  ###Step 1: Clone the Git repository
  
  git clone https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison
@@ -342,7 +342,7 @@ B<Test with sample datasets:>
  
  Your output will look similar to the output below for the sample data. Because these reads end in "/1" or "/2" we will not add "-c" when we call "RNA-SeqAlign2Ref.pl".
  
-
+ 
  ==> /homes/bioinfo/test_git/Galaxy2-adrenal_1.fastq <==
  @ERR030881.107 HWI-BRUNOP16X_0001:2:1:13663:1096#0/1
  ATCTTTTGTGGCTACAGTAAGTTCAATCTGAAGTCAAAACCAACCAATTT
@@ -366,7 +366,7 @@ B<Test with sample datasets:>
  55*'+&&5'55('''888:8FFFFFFFFFF4/1;/4./++FFFFF=5:E#
  @ERR030881.20718 HWI-BRUNOP16X_0001:2:1:12184:5115#0/1
  CCCGGCCTAACTTTCATTTAATTTCAATGAATTTTCTTTTTTTTTTTTTT
-
+ 
  
  Call "RNA-SeqAlign2Ref.pl".
  
@@ -387,6 +387,8 @@ B<Test with sample datasets:>
  
  bash ~/test_git/human19_qsubs/human19_qsubs_map.sh
  
- 
+ bash ~/test_git/human19_qsubs/human19_qsubs_merge.sh
 
-=cut
+ 
+ 
+ =cut
