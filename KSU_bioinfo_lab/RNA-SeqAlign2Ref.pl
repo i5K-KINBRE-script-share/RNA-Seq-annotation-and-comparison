@@ -45,7 +45,7 @@ GetOptions (
               'p|project_name:s' => \$project_name,
 			  'c|convert_header' => \$convert_header,
 			  'm|mapq:i' => \$mapq,
-			  'g|GTF_GFF:s' => \$gtf
+			  'g|GTF_GFF:s' => \$gtf,
 			  'l|min_len:s' => \$min_len
               )  
 or pod2usage(2);
