@@ -1,0 +1,2 @@
+brain	~/test_git/Galaxy4-brain_1.fastq	~/test_git/Galaxy5-brain_2.fastq	treatment_brain
+adrenal	~/test_git/Galaxy2-adrenal_1.fastq	~/test_git/Galaxy3-adrenal_2.fastq	treatment_adrenal
