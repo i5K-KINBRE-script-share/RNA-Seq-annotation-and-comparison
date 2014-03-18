@@ -10,7 +10,6 @@ use strict;
 use warnings;
 use File::Basename; # enable manipulating of the full path
 use Cwd;
-use Cwd 'abs_path';
 # use List::Util qw(max);
 # use List::Util qw(sum);
 # use Bio::SeqIO;
@@ -115,8 +114,6 @@ for my $samples (@reads)
         my (${filename2}, ${directories2}, ${suffix2}) = fileparse($r2[$file],'\..*'); # break appart filenames
         $out_dir = ${directories};
         print "OUT_DIR = $out_dir\n";
-        $out_dir = abs_path($out_dir);
-        print "NEW_OUT_DIR = $out_dir\n";
         open (SCRIPT, '>', "${home}/${project_name}_scripts/${filename}_clean.sh") or die "Can't open ${home}/${project_name}_scripts/${filename}_clean.sh!\n"; # create a shell script for each read-pair set
         print SCRIPT '#!/bin/bash';
         print SCRIPT "\n";
