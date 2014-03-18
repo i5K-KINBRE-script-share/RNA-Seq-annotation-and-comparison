@@ -134,10 +134,10 @@ for my $samples (@reads)
         #######################################################################
         print SCRIPT "#######################################################################\n######### Clean reads for low quality without de-duplicating ##########\n#######################################################################\n";
         print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=40G ${home}/${project_name}_scripts/${filename}_clean.sh\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len $min_len -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${directories}${filename}_good -out_bad ${directories}${filename}_bad\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1.fastq -fastq2 ${directories}${filename}_good_2.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned.gd -out_bad null\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_1_singletons.gd -out_bad null\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_2_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_2_singletons.gd -out_bad null\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len $min_len -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${home}/${filename}_good -out_bad ${home}/${filename}_bad\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${home}/${filename}_good_1.fastq -fastq2 ${home}/${filename}_good_2.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned.gd -out_bad null\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${home}/${filename}_good_1_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_1_singletons.gd -out_bad null\n";
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${home}/${filename}_good_2_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_2_singletons.gd -out_bad null\n";
         if ($old_count != $new_count)
         {
             $clean_read_file1 = '';
@@ -146,15 +146,15 @@ for my $samples (@reads)
         }
         if ($clean_read_file1)
         {
-            $clean_read_file1 = "$clean_read_file1"." ${directories}${filename}_good_1.fastq";
-            $clean_read_file2 = "$clean_read_file2"." ${directories}${filename}_good_2.fastq";
-            $clean_read_singletons = "$clean_read_singletons". " ${directories}${filename}_good_1_singletons.fastq ${directories}${filename}_good_2_singletons.fastq";
+            $clean_read_file1 = "$clean_read_file1"." ${home}/${filename}_good_1.fastq";
+            $clean_read_file2 = "$clean_read_file2"." ${home}/${filename}_good_2.fastq";
+            $clean_read_singletons = "$clean_read_singletons". " ${home}/${filename}_good_1_singletons.fastq ${home}/${filename}_good_2_singletons.fastq";
         }
         else
         {
-            $clean_read_file1 = " ${directories}${filename}_good_1.fastq";
-            $clean_read_file2 = " ${directories}${filename}_good_2.fastq";
-            $clean_read_singletons = " ${directories}${filename}_good_1_singletons.fastq ${directories}${filename}_good_2_singletons.fastq";
+            $clean_read_file1 = " ${home}/${filename}_good_1.fastq";
+            $clean_read_file2 = " ${home}/${filename}_good_2.fastq";
+            $clean_read_singletons = " ${home}/${filename}_good_1_singletons.fastq ${home}/${filename}_good_2_singletons.fastq";
         }
     }
     $old_count=$new_count;
@@ -171,23 +171,23 @@ for my $samples (@reads)
     print SCRIPT "#!/bin/bash\n";
     print SCRIPT "export PATH=\$PATH:/homes/bjsco/bin\n";
     print SCRIPT "#######################################################################\n######### Align the RNA-seq reads to the genome with Tophat2 ##########\n#######################################################################\n";
-    print SCRIPT "cat$clean_read_file1 > ${out_dir}$samples->[0]_good_1.fastq # concatenate single fasta\n"; # this and the next two lines merge forwards reads, reverse reads, and singletons respectively into three fastq files
-    print SCRIPT "cat$clean_read_file2 > ${out_dir}$samples->[0]_good_2.fastq # concatenate single fasta\n";
-    print SCRIPT "cat$clean_read_singletons > ${out_dir}$samples->[0]_good_singletons.fastq # concatenate single fasta\n";
-    print SCRIPT "mkdir ${out_dir}$samples->[0]_tophat2_out\n";
-    print SCRIPT "/homes/bjsco/bin/tophat2 -p 20 -g 20 -o ${out_dir}$samples->[0]_tophat2_out -G $gtf $index ${out_dir}$samples->[0]_good_1.fastq ${out_dir}$samples->[0]_good_2.fastq,${out_dir}$samples->[0]_good_singletons.fastq\n"; # map reads with tophat
+    print SCRIPT "cat$clean_read_file1 > ${home}/$samples->[0]_good_1.fastq # concatenate single fasta\n"; # this and the next two lines merge forwards reads, reverse reads, and singletons respectively into three fastq files
+    print SCRIPT "cat$clean_read_file2 > ${home}/$samples->[0]_good_2.fastq # concatenate single fasta\n";
+    print SCRIPT "cat$clean_read_singletons > ${home}/$samples->[0]_good_singletons.fastq # concatenate single fasta\n";
+    print SCRIPT "mkdir ${home}/$samples->[0]_tophat2_out\n";
+    print SCRIPT "/homes/bjsco/bin/tophat2 -p 20 -g 20 -o ${home}/$samples->[0]_tophat2_out -G $gtf $index ${home}/$samples->[0]_good_1.fastq ${home}/$samples->[0]_good_2.fastq,${home}/$samples->[0]_good_singletons.fastq\n"; # map reads with tophat
     print SCRIPT "#######################################################################\n#####  Assemble expressed genes and transcripts with Cufflinks2 #######\n#######################################################################\n";
-    print SCRIPT "/homes/bjsco/bin/cufflinks -o ${out_dir}$samples->[0]_tophat2_out -G $gtf -N  ${out_dir}$samples->[0]_tophat2_out/accepted_hits.bam\n"; #run cufflinks to assemble each transcript
+    print SCRIPT "/homes/bjsco/bin/cufflinks -o ${home}/$samples->[0]_tophat2_out -G $gtf -N  ${home}/$samples->[0]_tophat2_out/accepted_hits.bam\n"; #run cufflinks to assemble each transcript
     open (ASSEMBLED_TRANSCRIPTS, '>>', "${home}/assemblies.txt") or die "can't open ${home}/assemblies.txt: $!"; #create cufflinks assembled transcript gtf list file
-    print ASSEMBLED_TRANSCRIPTS "${out_dir}$samples->[0]_tophat2_out/transcripts.gtf\n";
+    print ASSEMBLED_TRANSCRIPTS "${home}/$samples->[0]_tophat2_out/transcripts.gtf\n";
     
     if ($sams{$samples->[3]})
     {
-        $sams{$samples->[3]} = "$sams{$samples->[3]}".",${out_dir}$samples->[0]_tophat2_out/accepted_hits.sam";
+        $sams{$samples->[3]} = "$sams{$samples->[3]}".",${home}/$samples->[0]_tophat2_out/accepted_hits.sam";
     }
     else
     {
-        $sams{$samples->[3]} = "${out_dir}$samples->[0]_tophat2_out/accepted_hits.sam";
+        $sams{$samples->[3]} = "${home}/$samples->[0]_tophat2_out/accepted_hits.sam";
     }
     print QSUBS_MAP "qsub -l h_rt=48:00:00,mem=2G -pe single 20 ${home}/${project_name}_scripts/$samples->[0]_map.sh\n";
     
@@ -204,11 +204,11 @@ print SCRIPT "#!/bin/bash\n";
 print SCRIPT "export PATH=\$PATH:/homes/bjsco/cufflinks-2.1.1.Linux_x86_64/cuffmerge\n";
 print SCRIPT "export PATH=\$PATH:/homes/bjsco/bin\n";
 print SCRIPT "#######################################################################\n#####          Merge these assemblies with Cuffmerge            #######\n#######################################################################\n";
-print SCRIPT "mkdir ${out_dir}merge\n";
-print SCRIPT "mkdir ${out_dir}diff\n";
-print SCRIPT "/homes/bjsco/cufflinks-2.1.1.Linux_x86_64/cuffmerge -o ${out_dir}merge -g $gtf ${out_dir}assemblies.txt\n";
+print SCRIPT "mkdir ${home}/merge\n";
+print SCRIPT "mkdir ${home}/diff\n";
+print SCRIPT "/homes/bjsco/cufflinks-2.1.1.Linux_x86_64/cuffmerge -o ${home}/merge -g $gtf ${home}/assemblies.txt\n";
 print SCRIPT "#######################################################################\n#####  Estimate differential expression with Cuffdiff2          #######\n#######################################################################\n";
-print SCRIPT "/homes/bjsco/bin/cuffdiff -o ${out_dir}diff $gtf -L ";
+print SCRIPT "/homes/bjsco/bin/cuffdiff -o ${home}/diff $gtf -L ";
 my ($L_final,$sam_final);
 for my $treatment_name (keys %sams)
 {
