@@ -10,6 +10,7 @@ use strict;
 use warnings;
 use File::Basename; # enable manipulating of the full path
 use Cwd;
+use Cwd 'abs_path';
 # use List::Util qw(max);
 # use List::Util qw(sum);
 # use Bio::SeqIO;
