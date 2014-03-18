@@ -52,6 +52,7 @@ pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 my $dirname = dirname(__FILE__); # github directories (all github directories must be in the same directory)
 my $home = getcwd; # working directory (this is where output files will be printed)
+print "HOME = $home\n";
 mkdir "${home}/${project_name}_scripts";
 mkdir "${home}/${project_name}_qsubs";
 mkdir "${home}/${project_name}_prinseq";
@@ -87,6 +88,8 @@ close (SCRIPT);
 ###############################################################################
 ##############     Write scripts for each sample             ##################
 ###############################################################################
+my $old_count = 0;
+my $new_count = 0;
 for my $samples (@reads)
 {
     my @r1 = split(',',$samples->[1]); # get list of forward reads
@@ -110,6 +113,9 @@ for my $samples (@reads)
         my (${filename}, ${directories}, ${suffix}) = fileparse($r1[$file],'\..*'); # break appart filenames
         my (${filename2}, ${directories2}, ${suffix2}) = fileparse($r2[$file],'\..*'); # break appart filenames
         $out_dir = ${directories};
+        print "OUT_DIR = $out_dir\n";
+        $out_dir = abs_path($out_dir);
+        print "NEW_OUT_DIR = $out_dir\n";
         open (SCRIPT, '>', "${home}/${project_name}_scripts/${filename}_clean.sh") or die "Can't open ${home}/${project_name}_scripts/${filename}_clean.sh!\n"; # create a shell script for each read-pair set
         print SCRIPT '#!/bin/bash';
         print SCRIPT "\n";
@@ -131,6 +137,12 @@ for my $samples (@reads)
         print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1.fastq -fastq2 ${directories}${filename}_good_2.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned.gd -out_bad null\n";
         print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_1_singletons.gd -out_bad null\n";
         print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_2_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_2_singletons.gd -out_bad null\n";
+        if ($old_count != $new_count)
+        {
+            $clean_read_file1 = '';
+            $clean_read_file2 = '';
+            $clean_read_singletons = '';
+        }
         if ($clean_read_file1)
         {
             $clean_read_file1 = "$clean_read_file1"." ${directories}${filename}_good_1.fastq";
@@ -144,6 +156,8 @@ for my $samples (@reads)
             $clean_read_singletons = " ${directories}${filename}_good_1_singletons.fastq ${directories}${filename}_good_2_singletons.fastq";
         }
     }
+    $old_count=$new_count;
+    ++$new_count;
     #######################################################################
     ######### Align the RNA-seq reads to the genome with Tophat2 ##########
     #####  Assemble expressed genes and transcripts with Cufflinks2 #######
