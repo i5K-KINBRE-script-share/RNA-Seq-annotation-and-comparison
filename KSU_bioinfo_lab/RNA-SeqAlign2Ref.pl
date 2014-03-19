@@ -21,12 +21,12 @@ use Pod::Usage;
 ##############         Print informative message             ##################
 ###############################################################################
 print "###########################################################\n";
-print "#  RNA-SeqAlign2Ref.pl                                       #\n";
+print "#  RNA-SeqAlign2Ref.pl                                    #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 3/15/14                    #\n";
 print "#  github.com/i5K-KINBRE-script-share                     #\n";
-print "#  perl RNA-SeqAlign2Ref.pl -help # for usage/options        #\n";
-print "#  perl RNA-SeqAlign2Ref.pl -man # for more details          #\n";
+print "#  perl RNA-SeqAlign2Ref.pl -help # for usage/options     #\n";
+print "#  perl RNA-SeqAlign2Ref.pl -man # for more details       #\n";
 print "###########################################################\n";
 ###############################################################################
 ##############                get arguments                  ##################
