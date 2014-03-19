@@ -60,7 +60,7 @@ Call "RNA-SeqAlign2Ref.pl".
 
     perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref.pl -r ~/test_git/sample_read_list.txt -f ~/test_git/hg19.fasta -g ~/test_git/Galaxy1-iGenomes_UCSC_hg19_chr19_gene_annotation.gtf -p human19
     
-###Step 4: Run tuxedo scripts
+###Step 4: Run prinseq and the tuxedo scripts
 
 Index the hg19 genome. When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
 
@@ -78,4 +78,54 @@ Map cleaned reads to hg19. When these jobs are complete go to next step. Test co
 Merge the assembled transcripts with Cuffmerge and estimate differential expression with Cuffdiff2.
 
     bash ~/test_git/human19_qsubs/human19_qsubs_merge.sh
+    
+### Output details:
+
+**Attribute definitions from the manual:**	
+
+**tss_id**	The ID of this transcript's inferred start site. Determines which primary transcript this processed transcript is believed to come from. Cuffcompare appends this attribute to every transcript reported in the .combined.gtf file.
+
+**p_id**	The ID of the coding sequence this transcript contains. This attribute is attached by Cuffcompare to the .combined.gtf records only when it is run with a reference annotation that include CDS records. Further, differential CDS analysis is only performed when all isoforms of a gene have p_id attributes, because neither Cufflinks nor Cuffcompare attempt to assign an open reading frame to transcripts.
+
+**Cuffdiff Output:**
+
+Cuffdiff produces results for many subsets of the data. Files beginning with “isoform” are transcript level, “gene” indicates the sum of all transcripts with the same gene_id, “cds” indicates the sum of all transcripts with shared coding sequence (according to the gtf annotation), and “tss”indicates the sum of transcripts that share an inferred start site (tss_id).
+
+**FPKM tracking files** = shows abundance in terms of Fragments Per Kilobase of exon model per Million mapped fragments (FPKM) for each sample (0..n). Each row represents the values for the object in the first column.
+
+**read group tracking files** = show unscaled estimate of fragments originating from the object in the first column as well as FPKM.
+
+**count tracking files** = show externally scaled estimate of fragments originating from the object in the first column. These values can not be used as input for count based differential expression packages like DeSeq and EdgeR because they are not raw counts.
+
+**differential expression test files** = show the results of testing for differential expression between FPKM values for the object in the first column.
+
+###Explore your output:
+
+1) Open your "~/test_git/human19_prinseq" directory. View your the "raw" and "cleaned" .gd file by uploading these to http://edwards.sdsu.edu/cgi-bin/prinseq/prinseq.cgi?report=1. Evaluate read quality pre and post cleaning metrics. Which graphs changed after cleaning? Why would want these values to change?
+
+2) Open your "~/test_git/diff" directory. Take a moment to explore a differential expression file. Find an object that is estimated to be differetially expressed and report each columns value for that object and interpret the result. 
+
+3) Customize your "RNA-SeqAlign2Ref.pl" script to change a parameter when you either clean with prinseq or use the tuxedo scripts. You have now run the following programs on Beocat: prinseq-lite.pl, tophat2, cufflinks, cuffdiff. You can find a full list of possible parameters for any of these by typing one of the following:
+
+        perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl
+        /homes/bjsco/bin/tophat2
+        /homes/bjsco/bin/cufflinks
+        /homes/bjsco/bin/cuffdiff
+        
+pick a new parameter from one of these links and customize your "RNA-SeqAlign2Ref.pl" by opening this file in a text editor, finding the line with that command (e.g. searching for /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl), and editing this line by adding your new parameter or changing the current value.
+
+For example, I find prinseq cleaning on this line and I can change the maximum number of N's allowed in a read by changing this:
+
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len $min_len -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${home}/${filename}_good -out_bad ${home}/${filename}_bad\n";
+        
+To this:
+
+        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len $min_len -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 10 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${home}/${filename}_good -out_bad ${home}/${filename}_bad\n";
+
+If my total number of N's allowed increases I do increasing the risk of counting an incorrect alignment but I increase the sensitivity of my experiment by including more reads.
+
+Describe the pros and cons of the parameter change that you made when customizing you script.
+
+
+
 
