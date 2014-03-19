@@ -107,8 +107,8 @@ Cuffdiff produces results for many subsets of the data. Files beginning with “
 
 3) Customize your "RNA-SeqAlign2Ref.pl" script to change a parameter when you either clean with prinseq or use the tuxedo scripts. You have now run the following programs on Beocat: prinseq-lite.pl, tophat2, cufflinks, cuffdiff. You can find a full list of possible parameters for any of these by typing one of the following:
 
-        perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl
-        /homes/bjsco/bin/tophat2
+        perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -h
+        /homes/bjsco/bin/tophat2 -h
         /homes/bjsco/bin/cufflinks
         /homes/bjsco/bin/cuffdiff
         
