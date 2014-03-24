@@ -32,7 +32,7 @@ print "###########################################################\n";
 ##############                get arguments                  ##################
 ###############################################################################
 my ($r_list,$project_name,$genome,$clean_read_file1,$clean_read_file2,@clean_r1,@clean_r2,$clean_read_singletons,$out_dir,$gtf);
-my %sams;
+my %bams;
 my $convert_header = 0;
 my $min_len=40;
 my $man = 0;
@@ -178,13 +178,13 @@ for my $samples (@reads)
     open (ASSEMBLED_TRANSCRIPTS, '>>', "${home}/assemblies.txt") or die "can't open ${home}/assemblies.txt: $!"; #create cufflinks assembled transcript gtf list file
     print ASSEMBLED_TRANSCRIPTS "${home}/$samples->[0]_tophat2_out/transcripts.gtf\n";
     
-    if ($sams{$samples->[3]})
+    if ($bams{$samples->[3]})
     {
-        $sams{$samples->[3]} = "$sams{$samples->[3]}".",${home}/$samples->[0]_tophat2_out/accepted_hits.sam";
+        $bams{$samples->[3]} = "$bams{$samples->[3]}".",${home}/$samples->[0]_tophat2_out/accepted_hits.bam";
     }
     else
     {
-        $sams{$samples->[3]} = "${home}/$samples->[0]_tophat2_out/accepted_hits.sam";
+        $bams{$samples->[3]} = "${home}/$samples->[0]_tophat2_out/accepted_hits.bam";
     }
     print QSUBS_MAP "qsub -l h_rt=48:00:00,mem=2G -pe single 20 ${home}/${project_name}_scripts/$samples->[0]_map.sh\n";
     
@@ -206,22 +206,22 @@ print SCRIPT "mkdir ${home}/diff\n";
 print SCRIPT "/homes/bjsco/cufflinks-2.1.1.Linux_x86_64/cuffmerge -o ${home}/merge -g $gtf ${home}/assemblies.txt\n";
 print SCRIPT "#######################################################################\n#####  Estimate differential expression with Cuffdiff2          #######\n#######################################################################\n";
 print SCRIPT "/homes/bjsco/bin/cuffdiff -o ${home}/diff $gtf -L ";
-my ($L_final,$sam_final);
-for my $treatment_name (keys %sams)
+my ($L_final,$bam_final);
+for my $treatment_name (keys %bams)
 {
     if ($L_final)
     {
         $L_final = "$L_final".",$treatment_name";
-        $sam_final = "$sam_final"." $sams{$treatment_name}";
+        $bam_final = "$bam_final"." $bams{$treatment_name}";
     }
     else
     {
         $L_final = "$treatment_name";
-        $sam_final = "$sams{$treatment_name}";
+        $bam_final = "$bams{$treatment_name}";
         
     }
 }
-print SCRIPT "$L_final $sam_final\n";
+print SCRIPT "$L_final $bam_final\n";
 print QSUBS_MERGE "qsub -l h_rt=24:00:00,mem=4G ${home}/${project_name}_scripts/${project_name}_merge.sh\n";
 
 print "done\n";
@@ -269,11 +269,17 @@ __END__
  
  =item B<-r, --r_list>
  
- The filename of the user provided list of sample labels, read files, and treatment labels. Each line should be tab separated with the sample label (no spaces), then the first read file, then the second read file, then the treatment label (no spaces). Example:
- brain_rep_1	~/test_git/Galaxy4-brain_1.fastq	~/test_git/Galaxy5-brain_2.fastq	treatment_brain
- adrenal_rep_1	~/test_git/Galaxy2-adrenal_1.fastq	~/test_git/Galaxy3-adrenal_2.fastq	treatment_adrenal
- brain_rep_2	~/test_git/Galaxy4-brain_1.fastq	~/test_git/Galaxy5-brain_2.fastq	treatment_brain
- adrenal_rep_2	~/test_git/Galaxy2-adrenal_1.fastq	~/test_git/Galaxy3-adrenal_2.fastq	treatment_adrenal
+ The filename of the user provided list of replicate labels, read files, and treatment labels. Each line should be tab separated with the replicate label (no spaces), then the first read file, then the second read file, then the treatment label (no spaces). Example:
+ brain_rep_1	~/test_git/Galaxy4-brain_rep_1_1.fastq	~/test_git/Galaxy5-brain_rep_1_2.fastq	treatment_brain
+ adrenal_rep_1	~/test_git/Galaxy2-adrenal_rep_1_1.fastq	~/test_git/Galaxy3-adrenal_rep_1_2.fastq	treatment_adrenal
+ brain_rep_2	~/test_git/Galaxy4-brain_rep_2_1.fastq	~/test_git/Galaxy5-brain_rep_2_2.fastq	treatment_brain
+ adrenal_rep_2	~/test_git/Galaxy2-adrenal_rep_2_1.fastq	~/test_git/Galaxy3-adrenal_rep_2_2.fastq	treatment_adrenal
+ 
+ If a replicate has more than one set of fastq files (multiple forward and reverse fastq files) list the forward fastq files separated by commas (no spaces) in the same order as the reverse also separated by commas. Each replicate should have all its files listed on the same line of the read file. Example (the first brain and adrenal replicates have two sets of fastq files):
+ brain_rep_1	~/test_git/Galaxy4-brain_rep_1_a_1.fastq,~/test_git/Galaxy4-brain_rep_1_b_1.fastq	~/test_git/Galaxy5-brain_rep_1_a_2.fastq,~/test_git/Galaxy5-brain_rep_1_b_2.fastq	treatment_brain
+ adrenal_rep_1	~/test_git/Galaxy2-adrenal_rep_1_a_1.fastq,~/test_git/Galaxy2-adrenal_rep_1_b_1.fastq	~/test_git/Galaxy3-adrenal_rep_1_a_2.fastq,~/test_git/Galaxy3-adrenal_rep_1_b_2.fastq	treatment_adrenal
+ brain_rep_2	~/test_git/Galaxy4-brain_rep_2_1.fastq	~/test_git/Galaxy5-brain_rep_2_2.fastq	treatment_brain
+ adrenal_rep_2	~/test_git/Galaxy2-adrenal_rep_2_1.fastq	~/test_git/Galaxy3-adrenal_rep_2_2.fastq	treatment_adrenal
  
  =item B<-f, --genome_fasta>
  
