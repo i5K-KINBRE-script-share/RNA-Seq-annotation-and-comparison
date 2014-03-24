@@ -233,11 +233,11 @@ __END__
 
 =head1 SYNOPSIS
  
- RNA-SeqAlign2Ref.pl - The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a reference genome. The script 1) converts illumina headers if the "-c" parameter is used, 2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html, 3) index the reference genome for mapping, 4) reads are aligned to the genome with Tophat2 (read more about Tophat2 at http://tophat.cbcb.umd.edu/manual.html) and expressed genes and transcripts are assembled with Cufflinks2, 5) these assemblies are merged with Cuffmerge and differential expression is estimated with Cuffdiff2.
+RNA-SeqAlign2Ref.pl - The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a reference genome. The script 1) converts illumina headers if the "-c" parameter is used, 2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html, 3) index the reference genome for mapping, 4) reads are aligned to the genome with Tophat2 (read more about Tophat2 at http://tophat.cbcb.umd.edu/manual.html) and expressed genes and transcripts are assembled with Cufflinks2, 5) these assemblies are merged with Cuffmerge and differential expression is estimated with Cuffdiff2.
  
  For examples parameter details run "perl RNA-SeqAlign2Ref.pl -man".
  
- =head1 USAGE
+=head1 USAGE
  
  perl RNA-SeqAlign2Ref.pl [options]
  
@@ -255,19 +255,19 @@ __END__
  -c	     convert fastq headers
  
  
- =head1 OPTIONS
+=head1 OPTIONS
  
- =over 8
+=over 8
  
- =item B<-help>
+=item B<-help>
  
  Print a brief help message and exits.
  
- =item B<-man>
+=item B<-man>
  
  Prints the more detailed manual page with output details and examples and exits.
  
- =item B<-r, --r_list>
+=item B<-r, --r_list>
  
  The filename of the user provided list of replicate labels, read files, and treatment labels. Each line should be tab separated with the replicate label (no spaces), then the first read file, then the second read file, then the treatment label (no spaces). Example:
  brain_rep_1	~/test_git/Galaxy4-brain_rep_1_1.fastq	~/test_git/Galaxy5-brain_rep_1_2.fastq	treatment_brain
@@ -281,31 +281,31 @@ __END__
  brain_rep_2	~/test_git/Galaxy4-brain_rep_2_1.fastq	~/test_git/Galaxy5-brain_rep_2_2.fastq	treatment_brain
  adrenal_rep_2	~/test_git/Galaxy2-adrenal_rep_2_1.fastq	~/test_git/Galaxy3-adrenal_rep_2_2.fastq	treatment_adrenal
  
- =item B<-f, --genome_fasta>
+=item B<-f, --genome_fasta>
  
  The filename of the user provided reference genome fasta.
  
- =item B<-g, --GTF_GFF>
+=item B<-g, --GTF_GFF>
  
  The filename of the user provided reference genome annotation gtf or gff file.
  
- =item B<-p, --project_name>
+=item B<-p, --project_name>
  
  The name of the project (no spaces). This will be used in filenaming.
  
- =item B<-c, --convert_header>
+=item B<-c, --convert_header>
  
  If the illumina headers do not end in /1 or /2 use this parameter to indicat that headers need to be converted. Check your headers by typing "head [fasta filename]" and read more about illumina headers at http://en.wikipedia.org/wiki/Fastq#Illumina_sequence_identifiers.
  
- =item B<-l, --min_len>
+=item B<-l, --min_len>
  
  The minimum read length. Reads shorter than this after cleaning will be discarded. Default minimum length is 40bp.
  
- =back
+=back
  
- =head1 DESCRIPTION
+=head1 DESCRIPTION
  
- B<RUN DETAILS:>
+B<RUN DETAILS:>
  
  The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script
  
@@ -329,7 +329,7 @@ __END__
  4) reads are aligned to the genome with Tophat2 (read more about Tophat2 at http://tophat.cbcb.umd.edu/manual.html) and expressed genes and transcripts are assembled with Cufflinks2 (read more about the Cuffdiff2 alogoritm in their publication http://bioinformaticsk-state.blogspot.com/2013/04/cuffdiff-2-and-isoform-abundance.html)
  5) these assemblies are merged with Cuffmerge and differential expression is estimated with Cuffdiff2
  
- B<Test with sample datasets:>
+B<Test with sample datasets:>
  
  # log into Beocat
  
@@ -409,4 +409,4 @@ __END__
 
  
  
- =cut
+=cut
