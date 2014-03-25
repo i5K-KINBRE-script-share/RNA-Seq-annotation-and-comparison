@@ -32,6 +32,7 @@ print "###########################################################\n";
 ##############                get arguments                  ##################
 ###############################################################################
 my ($r_list,$project_name,$genome,$clean_read_file1,$clean_read_file2,@clean_r1,@clean_r2,$clean_read_singletons,$out_dir,$gtf);
+my $pe='paired'; # paired for paired, single for single, default paired
 my %bams;
 my $convert_header = 0;
 my $min_len=40;
@@ -45,7 +46,8 @@ GetOptions (
 'p|project_name:s' => \$project_name,
 'c|convert_header' => \$convert_header,
 'g|GTF_GFF:s' => \$gtf,
-'l|min_len:s' => \$min_len
+'l|min_len:s' => \$min_len,
+'pe' => \$paired_or_single
 )
 or pod2usage(2);
 pod2usage(1) if $help;
@@ -64,7 +66,14 @@ open (READ_LIST, '<', $r_list) or die "Can't open $r_list!\n";
 while (<READ_LIST>)
 {
     chomp;
-    push @reads , [split];
+    
+    #If they are paired, use split, if not, do not
+    if ($paired_or_single eq 'paired'){
+    	push @reads , [split];
+    }
+    elsif ($paired_or_single eq 'single'){
+    	push @reads;
+    }
 }
 #######################################################################
 #########             Build Bowtie2 genome index             ##########
