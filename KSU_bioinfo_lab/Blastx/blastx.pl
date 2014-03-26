@@ -46,6 +46,7 @@ while(<OLD_FASTA>)
         ##################################################################################
 		if ($seq_count==1)
 		{
+			$one_hundred_fastas="${directories}split/${filename}_${file_count}.fasta";
 			open OUTFILE, '>', $one_hundred_fastas  or die "Couldn't open $one_hundred_fastas !\n";
 			my $bashs="${directories}jobs/${filename}_${file_count}.sh";
             $one_hundred_fastas="${directories}split/${filename}_${file_count}.fasta";
