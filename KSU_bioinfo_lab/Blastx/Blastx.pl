@@ -10,6 +10,7 @@ use strict;
 use warnings;
 use IO::File;
 use File::Basename; # enable maipulating of the full path
+use lib '/homes/bioinfo/bioinfo_software/perl_modules/File-Slurp-9999.19/lib';
 use File::Slurp;
 # use List::Util qw(max);
 # use List::Util qw(sum);
