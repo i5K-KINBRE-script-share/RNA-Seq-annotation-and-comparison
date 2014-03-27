@@ -1,0 +1,10 @@
+#!/bin/bash
+#######################################################################
+#########     Index the de novo transcriptome for Bowtie2    ##########
+#######################################################################
+
+perl ${git_dir}/read-cleaning-format-conversion/KSU_bioinfo_lab/filter_by_length.pl ${transcriptome}
+# remove sequences shorer than 200bp from the reference transcriptome
+
+/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2-build ${de_novo_fasta} ${index}
+# index de novo transcriptome
