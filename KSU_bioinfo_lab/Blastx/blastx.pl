@@ -19,7 +19,7 @@ use Pod::Usage;
 ##############         Print informative message             ##################
 ###############################################################################
 print "###########################################################\n";
-print "#  Blastx.pl [options] [FASTA filename]                             #\n";
+print "#  Blastx.pl [options] [FASTA filename]                   #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 12/30/13                   #\n";
 print "#  github.com/                                            #\n";
@@ -35,13 +35,15 @@ my $split_fasta = 100;
 my $one_hundred_fastas;
 my $max_target_seqs = 1;
 my $evalue = 1e-05;
+my $h_rt = '4:00:00';
 my $man = 0;
 my $help = 0;
 GetOptions (
         'help|?' => \$help,
         'man' => \$man,
         'm|max_target_seqs:i' => \$max_target_seqs,
-        'e|evalue:s' => \$evalue
+        'e|evalue:s' => \$evalue,
+        'h_rt:s' => \$h_rt,
 )
 or pod2usage(2);
 pod2usage(1) if $help;
@@ -84,7 +86,7 @@ while(<OLD_FASTA>)
             
             print SH eval quote($text_out);
             print SH "\n";
-			print QSUBS "qsub -l mem=1G,h_rt=4:00:00 -pe single 16 ${bashs}\n";
+			print QSUBS "qsub -l mem=1G,h_rt=${h_rt} -pe single 16 ${bashs}\n";
 			++$file_count;
 		}
         ##################################################################################
@@ -118,15 +120,15 @@ Blastx.pl - Script outputs fasta records split into files of 100 or less sequenc
 
 =head1 USAGE
  
- perl Blastx.pl [options]
+ perl Blastx.pl [options] [FASTA filename]
  
  Documentation options:
     -help    brief help message
     -man	    full documentation
- Required options:
-    -r	     reference CMAP
- Filtering options:
-    --s_algn	 second minimum % of possible alignment
+ Optional parameters:
+    -m	     maximum sequences to report alignments for
+    -e	     e-value
+    --h_rt	 hours runtime in hh:mm:ss
  
 =head1 OPTIONS
 
@@ -147,6 +149,10 @@ Maximum number of aligned sequences to keep. Default = '1'
 =item B<-e, --evalue>
 
 Expectation value (E) threshold for saving hits. Default = '1e-05'
+ 
+=item B<--h_rt>
+ 
+Per job hours runtime in hh:mm:ss. Default = '4:00:00'
 
 =back
 

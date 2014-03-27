@@ -1,7 +1,7 @@
 #!/bin/perl
 ##################################################################################
 #   
-#	USAGE: perl script.pl [options]
+#	USAGE: perl FindFailed.pl [options]
 #
 #  Created by jennifer shelton
 #
@@ -16,12 +16,12 @@ use Pod::Usage;
 ##############         Print informative message                ##################
 ##################################################################################
 print "#######################################################################\n";
-print "# perl find_failed.pl -x [XML directory]                              #\n";
+print "# perl FindFailed.pl -x [XML directory]                               #\n";
 print "#                                                                     #\n";
 print "#  Created by Jennifer Shelton 12/31/13                               #\n";
 print "#  github.com/                                                        #\n";
-print "#  perl script.pl -help # for usage/options                           #\n";
-print "#  perl script.pl -man # for more details                             #\n";
+print "#  perl FindFailed.pl -help # for usage/options                       #\n";
+print "#  perl FindFailed.pl -man # for more details                         #\n";
 print "#######################################################################\n";
 
 ##################################################################################
@@ -92,17 +92,17 @@ __END__
 
 =head1 NAME
 
-find_failed.pl - a package of scripts that find fasta sequences that have not been blasted (e.g. when a running blastx times out)
+FindFailed.pl - a package of scripts that find fasta sequences that have not been blasted (e.g. when a running blastx times out)
 
 =head1 USAGE
 
-perl find_failed.pl -x [XML directory]
+perl FindFailed.pl -x [XML directory]
 
  Documentation options:
    -help    brief help message
    -man	    full documentation
  Required options:
-   -x	    XMAP directory
+   -x	    XML directory
  
    
 =head1 OPTIONS
@@ -117,7 +117,7 @@ Print a brief help message and exits.
 
 Prints the more detailed manual page with output details and examples and exits.
 
-=item B<-x, --xmap>
+=item B<-x, --xml>
 
 The directory that your XMLs are in they are assumed to have been produced by blastx.pl. Do not include a trailing slash.
 
