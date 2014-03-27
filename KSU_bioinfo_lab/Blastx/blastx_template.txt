@@ -3,4 +3,4 @@
 ##### blastx fasta file of 100 or less sequences against nr protein database #####
 ##################################################################################
 
-/homes/bioinfo/bioinfo_software/ncbi-blast-2.2.28+/bin/blastx -query ${one_hundred_fastas} -db  /homes/bioinfo/bioinfo_software/blastdb/nr -evalue 1e-05 -out ${blast_xml} -outfmt 5 -max_target_seqs 1 -num_threads 16
+/homes/bioinfo/bioinfo_software/ncbi-blast-2.2.28+/bin/blastx -query ${one_hundred_fastas} -db  /homes/bioinfo/bioinfo_software/blastdb/nr -out ${blast_xml} -outfmt 5 -max_target_seqs ${max_target_seqs} -evalue ${evalue} -num_threads 16 
