@@ -48,7 +48,7 @@ chomp @xmlfiles;
 for my $xmlfile (@xmlfiles)
 {
 	my $passed=`grep -c '</BlastOutput_iterations>' $xmlfile`;
-	if ($passed)
+	if (!$passed)
 	{
 		my $fasta;
 		$xmlfile =~ /(.*)(blasts\/)(.*)(_[0-9]*)\.xml/;
@@ -80,7 +80,12 @@ for my $xmlfile (@xmlfiles)
 				}
 			}
 		}
-		
+        if (eof)
+        {
+            open (XML_OLD, '>>',$xmlfile ) or die "can't open $xmlfile !\n";
+            print XML_OLD '</BlastOutput_iterations>'."\n";
+            print XML_OLD '</BlastOutput>'."\n";
+        }		
 	}
 }
 
