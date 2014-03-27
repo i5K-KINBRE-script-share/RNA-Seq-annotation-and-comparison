@@ -33,7 +33,7 @@ print "###########################################################\n";
 ###############################################################################
 ##############                get arguments                  ##################
 ###############################################################################
-my ($r_list,$project_name,$transcriptome,$clean_read_file1,$clean_read_file2,@clean_r1,@clean_r2,$labels,$sams,$clean_read_singletons,$out_dir);
+my ($r_list,$project_name,$transcriptome,$min_len,$clean_read_file1,$clean_read_file2,@clean_r1,@clean_r2,$labels,$sams,$clean_read_singletons,$out_dir);
 my $convert_header = 0;
 my $mapq = 10;
 my $man = 0;
@@ -45,7 +45,8 @@ GetOptions (
 			  't|transcriptome:s' => \$transcriptome,
               'p|project_name:s' => \$project_name,
 			  'c|convert_header' => \$convert_header,
-			  'm|mapq:i' => \$mapq
+			  'm|mapq:i' => \$mapq,
+			  'l|read_length:i' => \$min_len
 
               )  
 or pod2usage(2);
@@ -126,12 +127,10 @@ for my $samples (@reads)
         #######################################################################
         ######### Clean reads for low quality without de-duplicating ##########
         #######################################################################
-        print SCRIPT "#######################################################################\n######### Clean reads for low quality without de-duplicating ##########\n#######################################################################\n";
         print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=10G ${home}/${project_name}_scripts/${filename}_clean.sh\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len 90 -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 -ns_max_p 1 -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${directories}${filename}_good -out_bad ${directories}${filename}_bad\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1.fastq -fastq2 ${directories}${filename}_good_2.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned.gd -out_bad null\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_1_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_1_singletons.gd -out_bad null\n";
-        print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq ${directories}${filename}_good_2_singletons.fastq -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_cleaned_2_singletons.gd -out_bad null\n";
+        my $text_out = read_file("${dirname}/Prinseq_template.txt"); ## read shell template with slurp
+        print SCRIPT eval quote($text_out);
+        print SCRIPT "\n";
         if ($clean_read_file1)
         {
             $clean_read_file1 = "$clean_read_file1"." ${directories}${filename}_good_1.fastq";
@@ -151,15 +150,11 @@ for my $samples (@reads)
     close (SCRIPT);
     open (SCRIPT, '>', "${home}/${project_name}_scripts/$samples->[0]_map.sh") or die "Can't open ${home}/${project_name}_scripts/$samples->[0]_map.sh!\n"; # create a shell script for each read-pair set
     open (QSUBS_MAP, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh!\n";
-    print QSUBS_MAP '#!/bin/bash';
-    print QSUBS_MAP "\n";
-    print SCRIPT '#!/bin/bash';
+    print QSUBS_MAP "#!/bin/bash\n";
+    my $text_out = read_file("${dirname}/Bowtie2_map_template.txt"); ## read shell template with slurp
+    print SCRIPT eval quote($text_out);
     print SCRIPT "\n";
-    print SCRIPT "#######################################################################\n######### Map reads to de novo transcriptome using Bowtie2   ##########\n#######################################################################\n";
-    print SCRIPT "cat$clean_read_file1 > ${out_dir}$samples->[0]_good_1.fastq # concatenate single fasta\n";
-    print SCRIPT "cat$clean_read_file2 > ${out_dir}$samples->[0]_good_2.fastq # concatenate single fasta\n";
-    print SCRIPT "cat$clean_read_singletons > ${out_dir}$samples->[0]_good_singletons.fastq # concatenate single fasta\n";
-    print SCRIPT "/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2 -p 20 --fr -q -x $index -1 ${out_dir}$samples->[0]_good_1.fastq -2 ${out_dir}$samples->[0]_good_2.fastq -U ${out_dir}$samples->[0]_good_singletons.fastq -S ${out_dir}$samples->[0]_200.sam\n";
+    
     if ($labels)
     {
         $sams = "$sams".",${out_dir}$samples->[0]_200.sam";
@@ -212,6 +207,7 @@ perl RNA-Seq_align.pl [options]
    -p	     project name (no spaces)
  Filtering options:
    -m	     minimum mapq
+   -l	     minimum read length
  Fastq format options:
    -c	     convert fastq headers
     
@@ -247,10 +243,16 @@ The name of the project (no spaces). This will be used in filenaming.
 If the illumina headers do not end in /1 or /2 use this parameter to indicat that headers need to be converted. Check your headers by typing "head [fasta filename]" and read more about illumina headers at http://en.wikipedia.org/wiki/Fastq#Illumina_sequence_identifiers.
  
 =item B<-m, --mapq>
- 
+
 The minimum MAPQ. Alignments with less than a 1 in 10 chance of
  actually being the correct alignment are filtered out by
  default. This is a minimum MAPQ of 10.
+
+=item B<-l, --read_length>
+ 
+The minimum read length. Reads shorter than 90 bp are filtered out by
+ default.
+ 
 
 =back
 
@@ -258,10 +260,11 @@ The minimum MAPQ. Alignments with less than a 1 in 10 chance of
 
 B<RUN DETAILS:>
 
- The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script 
+The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script
  
- 1) converts illumina headers if the "-c" parameter is used
- 2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html. Prinseq parameters can be customized by editing line 126. Prinseq parameters in detail: 
+1) converts illumina headers if the "-c" parameter is used
+
+2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html. Prinseq parameters can be customized by editing line 126. Prinseq parameters in detail:
     -min_len 90
     -min_qual_mean 25
     -trim_qual_type mean
@@ -276,28 +279,50 @@ B<RUN DETAILS:>
     -lc_method entropy
     -lc_threshold 70
 
- 3) creates a filtered transcriptome fasta file with putative transcripts less than 200 bp long removed and then indexes this transcriptome for mapping
- 4) reads are then mapped to the length filtered de novo transcriptome using Bowtie2 in the best mapping default mode, read more about Bowtie2 at http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml
- 5) count summaries are generated as a tab separated list where the first row is the sample ids and the first column is the name of the contig and the other values are the read counts per sample, see https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/tree/master/KSU_bioinfo_lab/Count_reads_denovo for details on how reads are summarized. This file can be used as input for DeSeq or EdgeR.
+3) creates a filtered transcriptome fasta file with putative transcripts less than 200 bp long removed and then indexes this transcriptome for mapping
+
+4) reads are then mapped to the length filtered de novo transcriptome using Bowtie2 in the best mapping default mode, read more about Bowtie2 at http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml
+
+5) count summaries are generated as a tab separated list where the first row is the sample ids and the first column is the name of the contig and the other values are the read counts per sample, see https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/tree/master/KSU_bioinfo_lab/Count_reads_denovo for details on how reads are summarized. This file can be used as input for DeSeq or EdgeR.
 
 B<Test with sample datasets:>
  
- # log into Beocat
+B<Find more detailed tuturial at https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/RNA-SeqAlign/RNA-SeqAlignLAB.md>
+ 
+1) Log into Beocat and retrieve your scripts and raw data using the following code.
+
 
  git clone https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison
- 
+
  git clone https://github.com/i5K-KINBRE-script-share/read-cleaning-format-conversion
 
- perl RNA-Seq_align.pl -r sample_data/sample.txt -t sample_data/sample_transcriptome.fasta -p test -c
- bash test_qsubs_clean.sh
- ## When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
- ## download the ".gd" files in the Project_name_prinseq directory and upload them to http://edwards.sdsu.edu/cgi-bin/prinseq/prinseq.cgi?report=1 to evaluate read quality pre and post cleaning
- bash test_qsubs_index.sh
- ## When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
- bash test_qsubs_map.sh
- ## When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
- bash test_qsubs_count.sh
- 
- 
 
+ mkdir test_de_novo_DE
+
+ cd test_de_novo_DE
+
+
+ ln -s /homes/bioinfo/pipeline_datasets/RNA-SeqAlign/* ~/test_de_novo_DE/
+
+
+
+ perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign/RNA-SeqAlign.pl -r ~/test_de_novo_DE/cell_line_reads_DE.txt -t ~/test_de_novo_DE/CDH_clustermergedAssembly_cell_line_33.fa -p cell_lines
+
+2) Index the de novo transcriptome. When this job is complete go to next step. Test completion by typing "status" in a Beocat session.
+
+ bash ~/test_de_novo_DE/cell_lines_qsubs/cell_lines_qsubs_index.sh
+
+3) When these jobs are complete view the ".gd" files and then go to next step. Test completion by typing "status" in a Beocat session. Download the ".gd" files in the Project_name_prinseq directory and upload them to http://edwards.sdsu.edu/cgi-bin/prinseq/prinseq.cgi?report=1 to evaluate read quality pre and post cleaning
+
+ bash ~/test_de_novo_DE/cell_lines_qsubs/cell_lines_qsubs_clean.sh
+
+4) Map your reads to the de novo transcriptome. When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
+
+ bash ~/test_de_novo_DE/cell_lines_qsubs/cell_lines_qsubs_map.sh
+
+5) Summarize you read counts.
+
+ bash ~/test_de_novo_DE/cell_lines_qsubs/cell_lines_qsubs_count.sh
+ 
+ 
 =cut
