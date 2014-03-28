@@ -99,20 +99,6 @@ The script writes scripts and qsubs to generate count summaries for illumina pai
 
 5) count summaries are generated as a tab separated list where the first row is the sample ids and the first column is the name of the contig and the other values are the read counts per sample, see https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/tree/master/KSU_bioinfo_lab/Count_reads_denovo for details on how reads are summarized. This file can be used as input for DeSeq or EdgeR.
 
-Test with sample datasets:
+###Test with sample datasets:
 
-        # log into Beocat
-
-        git clone https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison
-
-        git clone https://github.com/i5K-KINBRE-script-share/read-cleaning-format-conversion
-
-        perl RNA-Seq_align.pl -r sample_data/sample.txt -t sample_data/sample_transcriptome.fasta -p test -c
-        bash test_qsubs_clean.sh
-        ## When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
-        ## download the ".gd" files in the Project_name_prinseq directory and upload them to http://edwards.sdsu.edu/cgi-bin/prinseq/prinseq.cgi?report=1 to evaluate read quality pre and post cleaning
-        bash test_qsubs_index.sh
-        ## When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
-        bash test_qsubs_map.sh
-        ## When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
-        bash test_qsubs_count.sh
+###See: https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/RNA-SeqAlign/RNA-SeqAlignLAB.md

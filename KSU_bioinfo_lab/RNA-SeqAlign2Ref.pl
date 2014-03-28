@@ -344,13 +344,9 @@ B<Test with sample datasets:>
  mkdir test_git
  cd test_git
  
- Create symbolic links to raw reads from the brain and adrenal glands and the hg19 annotation gtf file.
+ Create symbolic links to hg19 fasta file and raw reads from the brain and adrenal glands and the hg19 annotation gtf file.
  
- ln -s ~/RNA-Seq-annotation-and-comparison/sample_datasets/* ~/test_git/
- 
- Create symbolic links to hg19 fasta file.
- 
- ln -s /homes/bioinfo/hg19/hg19.fasta ~/test_git/
+ ln -s /homes/bioinfo/pipeline_datasets/RNA-SeqAlign2Ref/* ~/test_git/
  
  ###Step 3: Write tuxedo scripts
  
@@ -388,7 +384,7 @@ B<Test with sample datasets:>
  
  Call "RNA-SeqAlign2Ref.pl".
  
- perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref.pl -r ~/test_git/sample_read_list.txt -f ~/test_git/hg19.fasta -g ~/test_git/Galaxy1-iGenomes_UCSC_hg19_chr19_gene_annotation.gtf -p human19
+ perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref.pl -r ~/test_git/sample_read_list.txt -f ~/test_git/hg19.fa -g ~/test_git/Galaxy1-iGenomes_UCSC_hg19_chr19_gene_annotation.gtf -p human19
  
  ###Step 4: Run tuxedo scripts
  
