@@ -1,7 +1,7 @@
 #!/bin/perl
 ###############################################################################
 #   
-#	USAGE: perl RNA-Seq_align.pl [options]
+#	USAGE: perl RNA-SeqAlign.pl [options]
 #
 #  Created by jennifer shelton
 #
@@ -23,12 +23,12 @@ use Pod::Usage;
 ##############         Print informative message             ##################
 ###############################################################################
 print "###########################################################\n";
-print "#  RNA-Seq_align.pl                                       #\n";
+print "#  RNA-SeqAlign.pl                                       #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 3/15/14                    #\n";
 print "#  github.com/i5K-KINBRE-script-share                     #\n";
-print "#  perl RNA-Seq_align.pl -help # for usage/options        #\n";
-print "#  perl RNA-Seq_align.pl -man # for more details          #\n";
+print "#  perl RNA-SeqAlign.pl -help # for usage/options        #\n";
+print "#  perl RNA-SeqAlign.pl -man # for more details          #\n";
 print "###########################################################\n";
 ###############################################################################
 ##############                get arguments                  ##################
@@ -113,8 +113,7 @@ for my $samples (@reads)
         my (${filename2}, ${directories2}, ${suffix2}) = fileparse($r2[$file],'\..*'); # break appart filenames
         $out_dir = ${directories};
         open (SCRIPT, '>', "${home}/${project_name}_scripts/${filename}_clean.sh") or die "Can't open ${home}/${project_name}_scripts/${filename}_clean.sh!\n"; # create a shell script for each read-pair set
-        print SCRIPT '#!/bin/bash';
-        print SCRIPT "\n";
+        print SCRIPT "#!/bin/bash\n";
         if ($convert_header)
         {
             print SCRIPT "#######################################################################\n############ Convert headers of illumina paired-end data ##############\n#######################################################################\n";
@@ -128,7 +127,7 @@ for my $samples (@reads)
         ######### Clean reads for low quality without de-duplicating ##########
         #######################################################################
         print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=10G ${home}/${project_name}_scripts/${filename}_clean.sh\n";
-        my $text_out = read_file("${dirname}/Prinseq_template.txt"); ## read shell template with slurp
+        $text_out = read_file("${dirname}/Prinseq_template.txt"); ## read shell template with slurp
         print SCRIPT eval quote($text_out);
         print SCRIPT "\n";
         if ($clean_read_file1)
@@ -151,7 +150,7 @@ for my $samples (@reads)
     open (SCRIPT, '>', "${home}/${project_name}_scripts/$samples->[0]_map.sh") or die "Can't open ${home}/${project_name}_scripts/$samples->[0]_map.sh!\n"; # create a shell script for each read-pair set
     open (QSUBS_MAP, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh!\n";
     print QSUBS_MAP "#!/bin/bash\n";
-    my $text_out = read_file("${dirname}/Bowtie2_map_template.txt"); ## read shell template with slurp
+    $text_out = read_file("${dirname}/Bowtie2_map_template.txt"); ## read shell template with slurp
     print SCRIPT eval quote($text_out);
     print SCRIPT "\n";
     
@@ -173,14 +172,13 @@ for my $samples (@reads)
 #######################################################################
 close (SCRIPT);
 open (SCRIPT, '>', "${home}/${project_name}_scripts/${project_name}_count.sh") or die "Can't open ${home}/${project_name}_scripts/${project_name}_count.sh!\n"; # create a shell script
-open (QSUBS_COUNT, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_count.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_count.sh!\n";
-print QSUBS_COUNT '#!/bin/bash';
-print QSUBS_COUNT "\n";
-print SCRIPT '#!/bin/bash';
+$text_out = read_file("${dirname}/Count_reads_template.txt"); ## read shell template with slurp
+print SCRIPT eval quote($text_out);
 print SCRIPT "\n";
-print SCRIPT "#######################################################################\n#########                Summarize read counts               ##########\n#######################################################################\n";
-print SCRIPT "perl ${dirname}/Count_reads_denovo/Count_reads_denovo.pl -s $sams -l $labels -m $mapq -o ${out_dir}${project_name}_read_counts.txt\n";
-print QSUBS_COUNT "qsub -l h_rt=8:00:00 ${home}/${project_name}_scripts/${project_name}_count.sh\n";   
+open (QSUBS_COUNT, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_count.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_count.sh!\n";
+print QSUBS_COUNT "#!/bin/bash\n";
+print QSUBS_COUNT "qsub -l h_rt=8:00:00 ${home}/${project_name}_scripts/${project_name}_count.sh\n";
+
 print "done\n";
 ###############################################################################
 ##############                  Documentation                ##################
@@ -190,13 +188,13 @@ __END__
 
 =head1 SYNOPSIS
 
-RNA-Seq_align.pl - The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script 1) converts illumina headers if the "-c" parameter is used, 2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html, 3) creates a filtered transcriptome fasta file with putative transcripts less than 200 bp long removed and then indexes this transcriptome for mapping, 4) reads are then mapped to the length filtered de novo transcriptome using Bowtie2 in the best mapping default mode, read more about Bowtie2 at http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml, 5) count summaries are generated as a tab separated list where the first row is the sample ids and the first column is the name of the contig and the other values are the read counts per sample, see https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/tree/master/KSU_bioinfo_lab/Count_reads_denovo for details on how reads are summarized.
+RNA-SeqAlign.pl - The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script 1) converts illumina headers if the "-c" parameter is used, 2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html, 3) creates a filtered transcriptome fasta file with putative transcripts less than 200 bp long removed and then indexes this transcriptome for mapping, 4) reads are then mapped to the length filtered de novo transcriptome using Bowtie2 in the best mapping default mode, read more about Bowtie2 at http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml, 5) count summaries are generated as a tab separated list where the first row is the sample ids and the first column is the name of the contig and the other values are the read counts per sample, see https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/tree/master/KSU_bioinfo_lab/Count_reads_denovo for details on how reads are summarized.
  
-For examples parameter details run "perl RNA-Seq_align.pl -man". 
+For examples parameter details run "perl RNA-SeqAlign.pl -man". 
 
 =head1 USAGE
 
-perl RNA-Seq_align.pl [options]
+perl RNA-SeqAlign.pl [options]
 
  Documentation options:
    -help    brief help message
@@ -296,17 +294,13 @@ B<Find more detailed tuturial at https://github.com/i5K-KINBRE-script-share/RNA-
 
  git clone https://github.com/i5K-KINBRE-script-share/read-cleaning-format-conversion
 
-
  mkdir test_de_novo_DE
 
  cd test_de_novo_DE
 
-
  ln -s /homes/bioinfo/pipeline_datasets/RNA-SeqAlign/* ~/test_de_novo_DE/
 
-
-
- perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign/RNA-SeqAlign.pl -r ~/test_de_novo_DE/cell_line_reads_DE.txt -t ~/test_de_novo_DE/CDH_clustermergedAssembly_cell_line_33.fa -p cell_lines
+ perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign/RNA-SeqAlign.pl -r ~/test_de_novo_DE/cell_line_reads_DE.txt -t ~/test_de_novo_DE/CDH_clustermergedAssembly_cell_line_33.fa -p cell_lines -l 40
 
 2) Index the de novo transcriptome. When this job is complete go to next step. Test completion by typing "status" in a Beocat session.
 

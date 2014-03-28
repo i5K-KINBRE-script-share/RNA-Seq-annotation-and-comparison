@@ -1,0 +1,5 @@
+#!/bin/bash
+#######################################################################
+#########                Summarize read counts               ##########
+#######################################################################
+perl ${dirname}/Count_reads_denovo/Count_reads_denovo.pl -s $sams -l $labels -m $mapq -o ${out_dir}${project_name}_read_counts.txt
