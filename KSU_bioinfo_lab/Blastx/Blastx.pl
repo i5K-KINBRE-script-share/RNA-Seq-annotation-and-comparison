@@ -68,6 +68,7 @@ open QSUBS, '>', $subs or die "Couldn't open $subs !\n";
 `mkdir ${directories}split`;
 `mkdir ${directories}jobs`;
 `mkdir ${directories}blasts`;
+`mkdir ${directories}logs`;
 while(<OLD_FASTA>)
 {
 	unless (${seq_count} == 0) ## skip first record (it is a blank line)
@@ -87,7 +88,7 @@ while(<OLD_FASTA>)
             
             print SH eval quote($text_out);
             print SH "\n";
-			print QSUBS "qsub -l mem=1G,h_rt=${h_rt} -pe single 16 ${bashs}\n";
+			print QSUBS "qsub -l mem=1G,h_rt=${h_rt} -e ${directories}logs/ -o ${directories}logs/ -pe single 16 ${bashs}\n";
 			++$file_count;
 		}
         ##################################################################################
