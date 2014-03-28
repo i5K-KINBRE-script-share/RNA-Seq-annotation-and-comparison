@@ -23,12 +23,12 @@ use Pod::Usage;
 ##############         Print informative message             ##################
 ###############################################################################
 print "###########################################################\n";
-print "#  RNA-SeqAlign.pl                                       #\n";
+print "#  RNA-SeqAlign.pl                                        #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 3/15/14                    #\n";
 print "#  github.com/i5K-KINBRE-script-share                     #\n";
-print "#  perl RNA-SeqAlign.pl -help # for usage/options        #\n";
-print "#  perl RNA-SeqAlign.pl -man # for more details          #\n";
+print "#  perl RNA-SeqAlign.pl -help # for usage/options         #\n";
+print "#  perl RNA-SeqAlign.pl -man # for more details           #\n";
 print "###########################################################\n";
 ###############################################################################
 ##############                get arguments                  ##################
@@ -225,8 +225,8 @@ Prints the more detailed manual page with output details and examples and exits.
 =item B<-r, --r_list>
 
 The filename of the user provided list of read files and labels. Each line should be tab separated with the sample label (no spaces), then the first read file, then the second read file. Example:
-sample_1   sample_data/sample_1_R1.fastq   sample_data/sample_1_R2.fastq
-sample_2   sample_data/sample_2_R1.fastq   sample_data/sample_2_R2.fastq
+sample_1_rep1   sample_data/sample_1_R1.fastq   sample_data/sample_1_R2.fastq
+sample_2_rep1   sample_data/sample_2_R1.fastq   sample_data/sample_2_R2.fastq
 
 =item B<-t, --transcriptome>
  
