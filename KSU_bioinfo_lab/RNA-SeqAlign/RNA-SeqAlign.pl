@@ -171,6 +171,8 @@ for my $samples (@reads)
 #######################################################################
 close (SCRIPT);
 open (SCRIPT, '>', "${home}/${project_name}_scripts/${project_name}_count.sh") or die "Can't open ${home}/${project_name}_scripts/${project_name}_count.sh!\n"; # create a shell script
+${dirname} =~ /(.*RNA-Seq-annotation-and-comparison\/KSU_bioinfo_lab)(\/RNA-SeqAlign)/;
+my $shortdirname = $1;
 $text_out = read_file("${dirname}/Count_reads_template.txt"); ## read shell template with slurp
 print SCRIPT eval quote($text_out);
 print SCRIPT "\n";
