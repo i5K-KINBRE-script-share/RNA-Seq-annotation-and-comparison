@@ -1,0 +1,14 @@
+#!/bin/bash
+
+export PATH=\$PATH:/homes/bjsco/cufflinks-2.1.1.Linux_x86_64/cuffmerge
+export PATH=\$PATH:/homes/bjsco/bin
+#######################################################################
+#####          Merge these assemblies with Cuffmerge            #######
+#######################################################################
+mkdir ${home}/merge
+mkdir ${home}/diff
+/homes/bjsco/cufflinks-2.1.1.Linux_x86_64/cuffmerge -o ${home}/merge -g ${gtf} ${home}/assemblies.txt
+#######################################################################
+#####  Estimate differential expression with Cuffdiff2          #######
+#######################################################################
+/homes/bjsco/bin/cuffdiff -o ${home}/diff ${gtf} -L ${L_final} ${bam_final}
