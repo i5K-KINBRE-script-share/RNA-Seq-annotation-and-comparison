@@ -128,6 +128,8 @@ for my $samples (@reads)
         #######################################################################
         print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=10G ${home}/${project_name}_scripts/${filename}_clean.sh\n";
         $text_out = read_file("${dirname}/Prinseq_template.txt"); ## read shell template with slurp
+        print eval quote($text_out);
+        print "\n";
         print SCRIPT eval quote($text_out);
         print SCRIPT "\n";
         if ($clean_read_file1)
@@ -149,6 +151,9 @@ for my $samples (@reads)
     close (SCRIPT);
     open (SCRIPT, '>', "${home}/${project_name}_scripts/$samples->[0]_map.sh") or die "Can't open ${home}/${project_name}_scripts/$samples->[0]_map.sh!\n"; # create a shell script for each read-pair set
     $text_out = read_file("${dirname}/Bowtie2_map_template.txt"); ## read shell template with slurp
+    print "\n${dirname}/Bowtie2_map_template.txt\n";
+    print eval quote($text_out);
+    print "\n";
     print SCRIPT eval quote($text_out);
     print SCRIPT "\n";
     
@@ -170,9 +175,14 @@ for my $samples (@reads)
 #######################################################################
 close (SCRIPT);
 open (SCRIPT, '>', "${home}/${project_name}_scripts/${project_name}_count.sh") or die "Can't open ${home}/${project_name}_scripts/${project_name}_count.sh!\n"; # create a shell script
-${dirname} =~ /(.*RNA-Seq-annotation-and-comparison\/KSU_bioinfo_lab)(\/RNA-SeqAlign)/;
+$dirname =~ /(.*RNA-Seq-annotation-and-comparison\/KSU_bioinfo_lab)(\/RNA-SeqAlign)/;
 my $shortdirname = $1;
 $text_out = read_file("${dirname}/Count_reads_template.txt"); ## read shell template with slurp
+
+print "\n${dirname}/Count_reads_template.txt\n";
+print eval quote($text_out);
+print "\n";
+
 print SCRIPT eval quote($text_out);
 print SCRIPT "\n";
 open (QSUBS_COUNT, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_count.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_count.sh!\n";
