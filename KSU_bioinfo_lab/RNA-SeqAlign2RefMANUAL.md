@@ -110,13 +110,10 @@ Make a working directory.
         mkdir test_git
         cd test_git
         
-Create symbolic links to raw reads from the brain and adrenal glands and the hg19 annotation gtf file.
 
-        ln -s ~/RNA-Seq-annotation-and-comparison/sample_datasets/* ~/test_git/
+Create symbolic links to hg19 fasta file and to raw reads from the brain and adrenal glands and the hg19 annotation gtf file. Creating a symbolic link rather than copying avoids wasting disk space and protects your raw data from being altered.
 
-Create symbolic links to hg19 fasta file.
-
-        ln -s /homes/bioinfo/hg19/hg19.fasta ~/test_git/
+        ln -s /homes/bioinfo/pipeline_datasets/RNA-SeqAlign2Ref/* ~/test_git/
 
 ###Step 3: Write tuxedo scripts
 
