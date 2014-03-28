@@ -9,4 +9,4 @@ cat$clean_read_singletons > ${home}/$samples->[0]_good_singletons.fastq # concat
 #######################################################################
 ######### Map reads to de novo transcriptome using Bowtie2   ##########
 #######################################################################
-/home}/s/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2 -p 20 --fr -q -x $index -1 ${home}/$samples->[0]_good_1.fastq -2 ${home}/$samples->[0]_good_2.fastq -U ${home}/$samples->[0]_good_singletons.fastq -S ${home}/$samples->[0]_200.sam
+/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2 -p 20 --fr -q -x $index -1 ${home}/$samples->[0]_good_1.fastq -2 ${home}/$samples->[0]_good_2.fastq -U ${home}/$samples->[0]_good_singletons.fastq -S ${home}/$samples->[0]_200.sam
