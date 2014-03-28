@@ -2,11 +2,11 @@
 #######################################################################
 #########             Concatinate reads together             ##########
 #######################################################################
-cat$clean_read_file1 > ${out_dir}$samples->[0]_good_1.fastq # concatenate single fasta
-cat$clean_read_file2 > ${out_dir}$samples->[0]_good_2.fastq # concatenate single fasta
-cat$clean_read_singletons > ${out_dir}$samples->[0]_good_singletons.fastq # concatenate single fasta
+cat$clean_read_file1 > ${home}/$samples->[0]_good_1.fastq # concatenate single fasta
+cat$clean_read_file2 > ${home}/$samples->[0]_good_2.fastq # concatenate single fasta
+cat$clean_read_singletons > ${home}/$samples->[0]_good_singletons.fastq # concatenate single fasta
 
 #######################################################################
 ######### Map reads to de novo transcriptome using Bowtie2   ##########
 #######################################################################
-/home}/s/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2 -p 20 --fr -q -x $index -1 ${out_dir}$samples->[0]_good_1.fastq -2 ${out_dir}$samples->[0]_good_2.fastq -U ${out_dir}$samples->[0]_good_singletons.fastq -S ${out_dir}$samples->[0]_200.sam
+/home}/s/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2 -p 20 --fr -q -x $index -1 ${home}/$samples->[0]_good_1.fastq -2 ${home}/$samples->[0]_good_2.fastq -U ${home}/$samples->[0]_good_singletons.fastq -S ${home}/$samples->[0]_200.sam
