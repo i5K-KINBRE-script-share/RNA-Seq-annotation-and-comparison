@@ -87,6 +87,13 @@ print SCRIPT "\n";
 print QSUBS_INDEX "qsub -l mem=10G,h_rt=10:00:00 ${home}/${project_name}_scripts/${project_name}_index.sh\n";
 close (SCRIPT);
 ###############################################################################
+############   Open qsub scripts for mapping and cleaning    ##################
+###############################################################################
+open (QSUBS_CLEAN, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_clean.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_clean.sh!\n";
+print QSUBS_CLEAN "#!/bin/bash\n";
+open (QSUBS_MAP, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh!\n";
+print QSUBS_MAP "#!/bin/bash\n";
+###############################################################################
 ##############     Write scripts for each sample             ##################
 ###############################################################################
 for my $samples (@reads)
@@ -101,12 +108,6 @@ for my $samples (@reads)
     #######################################################################
     ############ Convert headers of illumina paired-end data ##############
     #######################################################################
-    open (QSUBS_CLEAN, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_clean.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_clean.sh!\n";
-    print QSUBS_CLEAN '#!/bin/bash';
-    print QSUBS_CLEAN "\n";
-    open (QSUBS_MAP, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh!\n";
-    print QSUBS_MAP '#!/bin/bash';
-    print QSUBS_MAP "\n";
     for my $file (0..$#r1)
     {
         my (${filename}, ${directories}, ${suffix}) = fileparse($r1[$file],'\..*'); # break appart filenames
@@ -148,8 +149,6 @@ for my $samples (@reads)
     #######################################################################
     close (SCRIPT);
     open (SCRIPT, '>', "${home}/${project_name}_scripts/$samples->[0]_map.sh") or die "Can't open ${home}/${project_name}_scripts/$samples->[0]_map.sh!\n"; # create a shell script for each read-pair set
-    open (QSUBS_MAP, '>', "${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh") or die "Can't open ${home}/${project_name}_qsubs/${project_name}_qsubs_map.sh!\n";
-    print QSUBS_MAP "#!/bin/bash\n";
     $text_out = read_file("${dirname}/Bowtie2_map_template.txt"); ## read shell template with slurp
     print SCRIPT eval quote($text_out);
     print SCRIPT "\n";
