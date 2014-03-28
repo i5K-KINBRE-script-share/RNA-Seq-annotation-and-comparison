@@ -33,7 +33,7 @@ print "###########################################################\n";
 ###############################################################################
 ##############                get arguments                  ##################
 ###############################################################################
-my ($r_list,$project_name,$transcriptome,$min_len,$clean_read_file1,$clean_read_file2,@clean_r1,@clean_r2,$labels,$sams,$clean_read_singletons,$out_dir);
+my ($r_list,$project_name,$transcriptome,$min_len,$clean_read_file1,$clean_read_file2,@clean_r1,@clean_r2,$labels,$sams,$clean_read_singletons);
 my $convert_header = 0;
 my $mapq = 10;
 my $man = 0;
@@ -112,7 +112,6 @@ for my $samples (@reads)
     {
         my (${filename}, ${directories}, ${suffix}) = fileparse($r1[$file],'\..*'); # break appart filenames
         my (${filename2}, ${directories2}, ${suffix2}) = fileparse($r2[$file],'\..*'); # break appart filenames
-        $out_dir = ${directories};
         open (SCRIPT, '>', "${home}/${project_name}_scripts/${filename}_clean.sh") or die "Can't open ${home}/${project_name}_scripts/${filename}_clean.sh!\n"; # create a shell script for each read-pair set
         print SCRIPT "#!/bin/bash\n";
         if ($convert_header)
@@ -155,12 +154,12 @@ for my $samples (@reads)
     
     if ($labels)
     {
-        $sams = "$sams".",${out_dir}$samples->[0]_200.sam";
+        $sams = "$sams".",${home}/$samples->[0]_200.sam";
         $labels  = "$labels".",$samples->[0]";
     }
     else
     {
-        $sams = "${out_dir}$samples->[0]_200.sam";
+        $sams = "${home}/$samples->[0]_200.sam";
         $labels  = "$samples->[0]";
     }
     print QSUBS_MAP "qsub -l h_rt=48:00:00,mem=2G -pe single 20 ${home}/${project_name}_scripts/$samples->[0]_map.sh\n";
