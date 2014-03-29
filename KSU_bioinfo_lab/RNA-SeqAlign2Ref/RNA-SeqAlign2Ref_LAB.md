@@ -104,7 +104,7 @@ Cuffdiff produces results for many subsets of the data. Files beginning with “
 
 ###Explore your output:
 
-1) Open your "~/test_git/human19_prinseq" directory. View your the "raw" and "cleaned" .gd file by uploading these to http://edwards.sdsu.edu/cgi-bin/prinseq/prinseq.cgi?report=1. Learn how to download files from Beocat on their webpage http://support.cis.ksu.edu/BeocatDocs/GettingStarted#BeocatDocs.2BAC8-TransferringFiles.HowdoItransferfilestoorfromBeocat. Evaluate read quality pre and post cleaning metrics. Which graphs changed after cleaning? Why would we want these values to change?
+1) Open your "~/test_git/human19_prinseq" directory. View your the "raw" and "cleaned" .gd file by uploading these to http://edwards.sdsu.edu/cgi-bin/prinseq/prinseq.cgi?report=1. Learn how to download files from Beocat at https://github.com/i5K-KINBRE-script-share/FAQ/blob/master/BeocatEditingTransferingFiles.md. Evaluate read quality pre and post cleaning metrics. Which graphs changed after cleaning? Why would we want these values to change?
 
 2) Open your "~/test_git/diff" directory. Take a moment to explore a differential expression file. Find an object that is estimated to be differetially expressed and report each columns' value for that object and interpret the result. 
 
