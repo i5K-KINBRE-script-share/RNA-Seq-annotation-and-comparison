@@ -115,7 +115,7 @@ Cuffdiff produces results for many subsets of the data. Files beginning with “
         /homes/bjsco/bin/cufflinks
         /homes/bjsco/bin/cuffdiff
         
-Pick a new parameter from one of these lists and customize your own pipeline by finding a filename that starts with the name of the program you choose and ends with `_template.txt`
+Pick a new parameter from one of these lists and customize your own pipeline by finding a filename that starts with the name of the program you choose and ends with `_template.txt`.
 
 Open this in a text editor using Cyberduck https://github.com/i5K-KINBRE-script-share/FAQ/blob/master/BeocatEditingTransferingFiles.md. Find the line with that command (e.g. searching for /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl), and edit this line by adding your new parameter or changing the current value.
 
