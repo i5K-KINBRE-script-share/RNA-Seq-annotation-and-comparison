@@ -115,15 +115,17 @@ Cuffdiff produces results for many subsets of the data. Files beginning with “
         /homes/bjsco/bin/cufflinks
         /homes/bjsco/bin/cuffdiff
         
-Pick a new parameter from one of these links and customize your "RNA-SeqAlign2Ref.pl" by opening this file in a text editor, finding the line with that command (e.g. searching for /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl), and editing this line by adding your new parameter or changing the current value.
+Pick a new parameter from one of these lists and customize your own pipeline by finding a filename that starts with the name of the program you choose and ends with `_template.txt`
 
-For example, I find prinseq cleaning on this line and I can change the maximum number of N's allowed in a read by changing this:
+Open this in a text editor using Cyberduck https://github.com/i5K-KINBRE-script-share/FAQ/blob/master/BeocatEditingTransferingFiles.md. Find the line with that command (e.g. searching for /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl), and edit this line by adding your new parameter or changing the current value.
 
-print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len $min_len -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 **-ns_max_p 1** -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${home}/${filename}_good -out_bad ${home}/${filename}_bad\n";
+For example, I find `Prinseq_template.txt` and I can change the maximum number of N's allowed in a read by changing this:
+
+perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len $min_len -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 **-ns_max_p 1** -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${home}/${filename}_good -out_bad ${home}/${filename}_bad
         
 To this:
 
-print SCRIPT "perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len $min_len -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 **-ns_max_p 10** -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${home}/${filename}_good -out_bad ${home}/${filename}_bad\n";
+perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -min_len $min_len -min_qual_mean 25 -trim_qual_type mean -trim_qual_rule lt -trim_qual_window 2 -trim_qual_step 1 -trim_qual_left 20 -trim_qual_right 20 **-ns_max_p 10** -trim_ns_left 5 -trim_ns_right 5 -lc_method entropy -lc_threshold 70 -out_format 3 -no_qual_header -log ${home}/${project_name}_prinseq/${filename}_paired.log\ -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_good ${home}/${filename}_good -out_bad ${home}/${filename}_bad
 
 If my total number of N's allowed increases I do increase the risk of counting an incorrect alignment but I also increase the sensitivity of my experiment by including more reads.
 
