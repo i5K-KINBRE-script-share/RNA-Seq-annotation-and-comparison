@@ -29,7 +29,7 @@ Create symbolic links to hg19 fasta file and to raw reads from the brain and adr
 
 Check to see if your fastq headers end in "/1" or "/2" (if they do not you must add the parameter "-c" when you run "RNA-SeqAlign2Ref.pl"
 
-    head /homes/bioinfo/test_git/*_1.fastq
+    head ~/test_git/*_1.fastq
     
 Your output will look similar to the output below for the sample data. Because these reads end in "/1" or "/2" we will not add "-c" when we call "RNA-SeqAlign2Ref.pl".
 
