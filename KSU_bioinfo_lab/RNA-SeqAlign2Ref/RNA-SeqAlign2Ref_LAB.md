@@ -59,17 +59,17 @@ GTATAACGCTAGACACAGCGGAGCTCGGGATTGGCTAAACTCCCATAGTA
 CCCGGCCTAACTTTCATTTAATTTCAATGAATTTTCTTTTTTTTTTTTTT
 ```
 
-Call "RNA-SeqAlign2Ref.pl".
+Call "RNA-SeqAlign2Ref.pl". REMEMBER to `cd` to your working diretory before running this Perl script by typing `cd test_git`.
 
     perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref.pl -r ~/test_git/sample_read_list.txt -f ~/test_git/hg19.fa -g ~/test_git/Galaxy1-iGenomes_UCSC_hg19_chr19_gene_annotation.gtf -p human19
     
 ###Step 4: Run prinseq and the tuxedo scripts
 
-Index the hg19 genome. When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
+Index the hg19 genome.
 
     bash ~/test_git/human19_qsubs/human19_qsubs_index.sh
 
-Clean raw reads. When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
+Clean raw reads. When all of these indexing and cleanning jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
 Download the ".gd" files in the "~/test_git/human19_prinseq" directory and upload them to http://edwards.sdsu.edu/cgi-bin/prinseq/prinseq.cgi?report=1 to evaluate read quality pre and post cleaning.
 
     bash ~/test_git/human19_qsubs/human19_qsubs_clean.sh
