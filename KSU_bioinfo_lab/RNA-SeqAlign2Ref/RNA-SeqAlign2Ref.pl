@@ -82,7 +82,7 @@ my $git_dir = $1;
 print "GITDIR: $git_dir\n";
 my (${genome_filename}, ${genome_directories}, ${genome_suffix}) = fileparse($genome,'\..*'); # break appart filenames
 my $index="${genome_directories}${genome_filename}";
-$text_out = read_file("${dirname}/Bowtie2_index_template.txt"); ## read shell template with slurp
+my $text_out = read_file("${dirname}/Bowtie2_index_template.txt"); ## read shell template with slurp
 print SCRIPT eval quote($text_out);
 print SCRIPT "\n";
 close (SCRIPT);
