@@ -1,0 +1,20 @@
+#!/bin/bash
+export PATH=\$PATH:/homes/bjsco/bin
+#######################################################################
+#########                 Concatenate reads                  ##########
+#######################################################################
+# this and the next line merges reads into a single fastq file
+cat$clean_read_file1 > ${home}/$samples->[0]_good.fastq
+
+mkdir ${home}/$samples->[0]_tophat2_out
+
+#######################################################################
+######### Align the RNA-seq reads to the genome with Tophat2 ##########
+#######################################################################
+/homes/bjsco/bin/tophat2 -p 20 -g 20 -o ${home}/$samples->[0]_tophat2_out -G $gtf $index ${home}/$samples->[0]_good.fastq
+ 
+#######################################################################
+#####  Assemble expressed genes and transcripts with Cufflinks2 #######
+#######################################################################
+/homes/bjsco/bin/cufflinks -o ${home}/$samples->[0]_tophat2_out -G $gtf -N  ${home}/$samples->[0]_tophat2_out/accepted_hits.bam
+

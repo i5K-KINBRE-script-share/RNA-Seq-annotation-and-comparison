@@ -1,4 +1,4 @@
-#!/bin/perl
+#!/usr/bin/perl
 ##################################################################################
 #
 # USAGE: perl Blastx.pl [FASTA filename]
@@ -20,10 +20,10 @@ use Pod::Usage;
 ##############         Print informative message             ##################
 ###############################################################################
 print "###########################################################\n";
-print "#  Blastx.pl [options] [FASTA filename]                   #\n";
+print "#  Blastx.pl Version 1.0                                  #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 12/30/13                   #\n";
-print "#  github.com/                                            #\n";
+print "#  github.com/i5K-KINBRE-script-share                     #\n";
 print "#  perl Blastx.pl -help # for usage/options               #\n";
 print "#  perl Blastx.pl -man # for more details                 #\n";
 print "###########################################################\n";
