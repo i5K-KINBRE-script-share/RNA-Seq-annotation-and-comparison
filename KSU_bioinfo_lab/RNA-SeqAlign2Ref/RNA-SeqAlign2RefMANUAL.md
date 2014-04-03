@@ -119,7 +119,7 @@ Create symbolic links to hg19 fasta file and to raw reads from the brain and adr
 
 Check to see if your fastq headers end in "/1" or "/2" (if they do not you must add the parameter "-c" when you run "RNA-SeqAlign2Ref.pl"
 
-        head /homes/bioinfo/test_git/*_1.fastq
+        head ~/test_git/*_1.fastq
 
 Your output will look similar to the output below for the sample data. Because these reads end in "/1" or "/2" we will not add "-c" when we call "RNA-SeqAlign2Ref.pl".
 
@@ -145,7 +145,7 @@ Your output will look similar to the output below for the sample data. Because t
         
 Call "RNA-SeqAlign2Ref.pl".
 
-        perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref.pl -r ~/test_git/sample_read_list.txt -f ~/test_git/hg19.fasta -g ~/test_git/Galaxy1-iGenomes_UCSC_hg19_chr19_gene_annotation.gtf -p human19
+        perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref.pl -r ~/test_git/sample_read_list.txt -f ~/test_git/hg19.fa -g ~/test_git/Galaxy1-iGenomes_UCSC_hg19_chr19_gene_annotation.gtf -p human19
 
 ###Step 4: Run tuxedo scripts
 
