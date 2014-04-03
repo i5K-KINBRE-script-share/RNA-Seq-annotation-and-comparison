@@ -137,5 +137,4 @@ The script writes scripts and qsubs to generate count summaries for illumina
 
 See: https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref_LAB.md
 
-        
-See https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref_LAB.md for output details.
+
