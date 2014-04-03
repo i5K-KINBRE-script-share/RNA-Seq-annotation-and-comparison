@@ -278,6 +278,20 @@ RNA-SeqAlign2Ref.pl - The script writes scripts and qsubs to generate count summ
 =head1 USAGE
  
 perl RNA-SeqAlign2Ref.pl [options]
+
+        Documentation options:
+        -help    brief help message
+        -man       full documentation
+        Required options:
+        -r          filename for file with tab separated list of sample labels, fastq files, and treatment labels
+        -f          filename of the reference genome fasta
+        -p          project name (no spaces)
+        -g          filename of the gtf or gff genome annotation
+        Filtering options:
+        -l          minimum read length
+        Fastq format options:
+        -c          convert fastq headers
+        -s          single end reads (default is paired)
  
 =head1 OPTIONS
  
