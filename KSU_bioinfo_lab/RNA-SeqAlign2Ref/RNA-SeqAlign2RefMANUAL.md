@@ -29,6 +29,7 @@ USAGE
         -l          minimum read length
         Fastq format options:
         -c          convert fastq headers
+        -s          single end reads (default is paired)
 
 OPTIONS
 
