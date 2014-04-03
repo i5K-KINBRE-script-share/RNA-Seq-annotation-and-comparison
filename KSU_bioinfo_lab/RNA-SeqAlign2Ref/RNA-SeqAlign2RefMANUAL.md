@@ -1,7 +1,7 @@
 SYNOPSIS
 
  RNA-SeqAlign2Ref.pl - The script writes scripts and qsubs to generate
-       count summaries for illumina paired end reads after mapping against a
+       count summaries for illumina paired or single end reads after mapping against a
        reference genome. The script 1) converts illumina headers if the "-c"
        parameter is used, 2) cleans raw reads using Prinseq
        http://prinseq.sourceforge.net/manual.html, 3) index the reference
@@ -81,10 +81,14 @@ OPTIONS
                 The name of the project (no spaces). This will be used in filenaming.
 
        -c, --convert_header
-                If the illumina headers do not end in /1 or /2 use this parameter to indicat that headers need to be converted. Check your headers by typing "head [fasta filename]" and read more about illumina headers at http://en.wikipedia.org/wiki/Fastq#Illumina_sequence_identifiers.
+                If the illumina headers do not end in /1 or /2 use this parameter to
+               indicat that headers need to be converted. Check your headers by typing
+               "head [fasta filename]" and read more about illumina headers at
+               http://en.wikipedia.org/wiki/Fastq#Illumina_sequence_identifiers.
 
        -l, --min_len
-                The minimum read length. Reads shorter than this after cleaning will be discarded. Default minimum length is 40bp.
+               The minimum read length. Reads shorter than this after cleaning will be
+               discarded. Default minimum length is 40bp.
 
        -s, --single
                If your reads are single end use this flag without it the script
@@ -95,11 +99,15 @@ DESCRIPTION
 
 RUN DETAILS:
 
-The script writes scripts and qsubs to generate count summaries for illumina paired end reads after mapping against a de novo transcriptome. The script
+The script writes scripts and qsubs to generate count summaries for illumina
+       paired end reads after mapping against a de novo transcriptome. The script
 
 1) converts illumina headers if the "-c" parameter is used
 
-2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html. Prinseq parameters can be customized by editing line 130. Prinseq parameters in detail:
+2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html.
+       Prinseq parameters can be customized by editing line 130. Prinseq parameters in
+       detail:
+
         -min_len 40
         -min_qual_mean 25
         -trim_qual_type mean
@@ -116,79 +124,18 @@ The script writes scripts and qsubs to generate count summaries for illumina pai
 
 3) indexes the reference genome for mapping
 
-4) reads are aligned to the genome with Tophat2 (read more about Tophat2 at http://tophat.cbcb.umd.edu/manual.html) and expressed genes and transcripts are assembled with Cufflinks2 (read more about the Cuffdiff2 alogoritm in their publication http://bioinformaticsk-state.blogspot.com/2013/04/cuffdiff-2-and-isoform-abundance.html)
+4) reads are aligned to the genome with Tophat2 (read more about Tophat2 at
+       http://tophat.cbcb.umd.edu/manual.html) and expressed genes and transcripts are
+       assembled with Cufflinks2 (read more about the Cuffdiff2 alogoritm in their
+       publication
+       http://bioinformaticsk-state.blogspot.com/2013/04/cuffdiff-2-and-isoform-abundance.html)
 
-5) these assemblies are merged with Cuffmerge and differential expression is estimated with Cuffdiff2
+5) these assemblies are merged with Cuffmerge and differential expression is
+       estimated with Cuffdiff2
 
 # Test with sample datasets:
 
-###Step 1: Clone the Git repository
+See: https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref_LAB.md
 
-Log into Beocat and clone the git repository for this pipeline.
-
-        git clone https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison
-
-###Step 2: Create project directory and add your input data to it
-
-Make a working directory.
-
-        mkdir test_git
-        cd test_git
-        
-
-Create symbolic links to hg19 fasta file and to raw reads from the brain and adrenal glands and the hg19 annotation gtf file. Creating a symbolic link rather than copying avoids wasting disk space and protects your raw data from being altered.
-
-        ln -s /homes/bioinfo/pipeline_datasets/RNA-SeqAlign2Ref/* ~/test_git/
-
-###Step 3: Write tuxedo scripts
-
-Check to see if your fastq headers end in "/1" or "/2" (if they do not you must add the parameter "-c" when you run "RNA-SeqAlign2Ref.pl"
-
-        head ~/test_git/*_1.fastq
-
-Your output will look similar to the output below for the sample data. Because these reads end in "/1" or "/2" we will not add "-c" when we call "RNA-SeqAlign2Ref.pl".
-
-
-        ==> /homes/bioinfo/test_git/Galaxy2-adrenal_1.fastq <==
-        @ERR030881.107 HWI-BRUNOP16X_0001:2:1:13663:1096#0/1
-        ATCTTTTGTGGCTACAGTAAGTTCAATCTGAAGTCAAAACCAACCAATTT
-        +
-        5.544,444344555CC?CAEF@EEFFFFFFFFFFFFFFFFFEFFFEFFF
-        @ERR030881.311 HWI-BRUNOP16X_0001:2:1:18330:1130#0/1
-        TCCATACATAGGCCTCGGGGTGGGGGAGTCAGAAGCCCCCAGACCCTGTG
-        +
-        GFFFGFFBFCHHHHHHHHHHIHEEE@@@=GHGHHHHHHHHHHHHHHHHHH
-        @ERR030881.1487 HWI-BRUNOP16X_0001:2:1:4144:1420#0/1
-        GTATAACGCTAGACACAGCGGAGCTCGGGATTGGCTAAACTCCCATAGTA
-
-        ==> /homes/bioinfo/test_git/Galaxy2-adrenal_1_bad_1.fastq <==
-        @ERR030881.107 HWI-BRUNOP16X_0001:2:1:13663:1096#0/1
-        ATCTTTTGTGGCTACAGTAAGTTCAATCTGAAGTCAAAACCAACCAATTT
-        +
-        5.544,444344555CC?CAEF@EEFFFFFFFFFFFFFFFFFEFFFEFFF
-        @ERR030881.1487 HWI-BRUNOP16X_0001:2:1:4144:1420#0/1
-        
-Call "RNA-SeqAlign2Ref.pl".
-
-        perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref.pl -r ~/test_git/sample_read_list.txt -f ~/test_git/hg19.fa -g ~/test_git/Galaxy1-iGenomes_UCSC_hg19_chr19_gene_annotation.gtf -p human19
-
-###Step 4: Run tuxedo scripts
-
-Index the hg19 genome. When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
-
-        bash ~/test_git/human19_qsubs/human19_qsubs_index.sh
-
-Clean raw reads. When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
-        Download the ".gd" files in the "~/test_git/human19_prinseq" directory and upload them to http://edwards.sdsu.edu/cgi-bin/prinseq/prinseq.cgi?report=1 to evaluate read quality pre and post cleaning.
-
-        bash ~/test_git/human19_qsubs/human19_qsubs_clean.sh
-
-Map cleaned reads to hg19. When these jobs are complete go to next step. Test completion by typing "status" in a Beocat session.
-
-        bash ~/test_git/human19_qsubs/human19_qsubs_map.sh
-        
-Merge the assembled transcripts with Cuffmerge and estimate differential expression with Cuffdiff2.
-
-        bash ~/test_git/human19_qsubs/human19_qsubs_merge.sh
         
 See https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref_LAB.md for output details.
