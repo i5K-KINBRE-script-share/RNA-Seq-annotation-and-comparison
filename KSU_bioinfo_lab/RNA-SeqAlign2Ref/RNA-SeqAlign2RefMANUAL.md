@@ -39,13 +39,33 @@ OPTIONS
                 Prints the more detailed manual page with output details and examples and exits.
 
        -r, --r_list
-                The filename of the user provided list of replicate labels, read files, and treatment labels. Each line should be tab separated with the replicate label (no spaces), then the first read file, then the second read file, then the treatment label (no spaces). Example:
+                The filename of the user provided list of replicate labels, read files,
+               and treatment labels.
+
+               For paired end reads: each line should be tab separated with the
+               replicate label (no spaces), then the first read file or files, then
+               the second read file or files, then the treatment label (no spaces).
+
+               For single end reads: each line should be tab separated with the
+               replicate label (no spaces), then the read file or files, then the
+               treatment label (no spaces).
+               
+               Example:
                 brain_rep_1    ~/test_git/Galaxy4-brain_rep_1_1.fastq  ~/test_git/Galaxy5-brain_rep_1_2.fastq  treatment_brain
                 adrenal_rep_1  ~/test_git/Galaxy2-adrenal_rep_1_1.fastq        ~/test_git/Galaxy3-adrenal_rep_1_2.fastq        treatment_adrenal
                 brain_rep_2    ~/test_git/Galaxy4-brain_rep_2_1.fastq  ~/test_git/Galaxy5-brain_rep_2_2.fastq  treatment_brain
                 adrenal_rep_2  ~/test_git/Galaxy2-adrenal_rep_2_1.fastq        ~/test_git/Galaxy3-adrenal_rep_2_2.fastq        treatment_adrenal
 
-                If a replicate has more than one set of fastq files (multiple forward and reverse fastq files) list the forward fastq files separated by commas (no spaces) in the same order as the reverse also separated by commas. Each replicate should have all its files listed on the same line of the read file. Example (the first brain and adrenal replicates have two sets of fastq files):
+                If a replicate has more than one set of fastq files (For paired end:
+               multiple forward and reverse fastq files; For single end: multiple
+               fastq files) list the forward fastq files separated by commas (no
+               spaces) in the same order as the reverse also separated by commas. Each
+               replicate should have all its files listed on the same line of the read
+               file.
+
+               Example (the first brain and adrenal replicates have two sets of fastq
+               files):
+               
                 brain_rep_1    ~/test_git/Galaxy4-brain_rep_1_a_1.fastq,~/test_git/Galaxy4-brain_rep_1_b_1.fastq       ~/test_git/Galaxy5-brain_rep_1_a_2.fastq,~/test_git/Galaxy5-brain_rep_1_b_2.fastq       treatment_brain
                 adrenal_rep_1  ~/test_git/Galaxy2-adrenal_rep_1_a_1.fastq,~/test_git/Galaxy2-adrenal_rep_1_b_1.fastq   ~/test_git/Galaxy3-adrenal_rep_1_a_2.fastq,~/test_git/Galaxy3-adrenal_rep_1_b_2.fastq   treatment_adrenal
                 brain_rep_2    ~/test_git/Galaxy4-brain_rep_2_1.fastq  ~/test_git/Galaxy5-brain_rep_2_2.fastq  treatment_brain
@@ -65,6 +85,11 @@ OPTIONS
 
        -l, --min_len
                 The minimum read length. Reads shorter than this after cleaning will be discarded. Default minimum length is 40bp.
+
+       -s, --single
+               If your reads are single end use this flag without it the script
+               assumes reads are paired end. Also skip the third column (the second
+               fastq file when making your read list).
 
 DESCRIPTION
 
