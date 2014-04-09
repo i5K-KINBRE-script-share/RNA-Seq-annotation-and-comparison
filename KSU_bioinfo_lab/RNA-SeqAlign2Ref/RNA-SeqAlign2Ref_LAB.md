@@ -27,7 +27,7 @@ Create symbolic links to hg19 fasta file and to raw reads from the brain and adr
 
 ###Step 3: Write tuxedo scripts
 
-Check to see if your fastq headers end in "/1" or "/2" (if they do not you must add the parameter "-c" when you run "RNA-SeqAlign2Ref.pl"
+Check to see if your fastq headers end in "/1" or "/2" (if they do not you must add the parameter "-c" when you run "RNA-SeqAlign2Ref.pl")
 
     head ~/test_git/*_1.fastq
     
@@ -59,7 +59,7 @@ GTATAACGCTAGACACAGCGGAGCTCGGGATTGGCTAAACTCCCATAGTA
 CCCGGCCTAACTTTCATTTAATTTCAATGAATTTTCTTTTTTTTTTTTTT
 ```
 
-Call "RNA-SeqAlign2Ref.pl". REMEMBER to `cd` to your working diretory before running this Perl script by typing `cd test_git`.
+Call "RNA-SeqAlign2Ref.pl". REMEMBER to `cd` to your working diretory before running this Perl script by typing `cd ~/test_git`.
 
     perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref.pl -r ~/test_git/sample_read_list.txt -f ~/test_git/hg19.fa -g ~/test_git/Galaxy1-iGenomes_UCSC_hg19_chr19_gene_annotation.gtf -p human19
     
