@@ -8,7 +8,7 @@ To begin this lab your should read about the software we will be using. Prinseq 
 
 We will be using the script "RNA-SeqAlign2Ref.pl" to organize our working directory and write scripts to index our reference genome (hg19), clean out reads, map our cleaned reads using Tophat2, 
 
-To find out more about the parameters for "RNA-SeqAlign2Ref.pl" run  "perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref.pl -man" or visit its manual at https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2RefMANUAL.md
+To find out more about the parameters for "RNA-SeqAlign2Ref.pl" run  `perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2Ref.pl -man` or visit its manual at https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/RNA-SeqAlign2Ref/RNA-SeqAlign2RefMANUAL.md
 
 ###Step 1: Clone the Git repository
 
