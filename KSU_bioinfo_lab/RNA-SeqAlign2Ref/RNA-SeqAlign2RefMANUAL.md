@@ -106,8 +106,9 @@ The script writes scripts and qsubs to generate count summaries for illumina
 1) converts illumina headers if the "-c" parameter is used
 
 2) cleans raw reads using Prinseq http://prinseq.sourceforge.net/manual.html.
-       Prinseq parameters can be customized by editing line 130. Prinseq parameters in
-       detail:
+       Prinseq parameters can be customized by editing ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/RNA-SeqAlign2Ref/Prinseq_template.txt. For details on how to relaxe cleaning stringency see http://prinseq.sourceforge.net/Preprocessing_454_SFF_chart.pdf. 
+       
+Prinseq parameters in detail:
 
         -min_len 40
         -min_qual_mean 25
