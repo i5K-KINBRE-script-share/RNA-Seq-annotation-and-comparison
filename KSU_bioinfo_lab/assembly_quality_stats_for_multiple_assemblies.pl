@@ -1,4 +1,4 @@
-#!/bin/perl
+#!/usr/bin/perl
 
 #  assembly_quality_stats_for_multiple_assemblies.pl
 #  
