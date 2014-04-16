@@ -23,7 +23,7 @@ use Pod::Usage;
 ##############         Print informative message             ##################
 ###############################################################################
 print "###########################################################\n";
-print "#  RNA-SeqAlign2Ref.pl  Version 1.0                       #\n";
+print "#  RNA-SeqAlign2Ref.pl  Version 1.1                       #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 3/15/14                    #\n";
 print "#  github.com/i5K-KINBRE-script-share                     #\n";
