@@ -3,4 +3,4 @@
 #######################################################################
 #########             Build Bowtie2 genome index             ##########
 #######################################################################
-/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2-build ${genome_directories}${genome_filename}.fasta ${index}
+/homes/bioinfo/bioinfo_software/bowtie2-2.1.0/bowtie2-build ${genome_directories}${genome_filename}.${genome_suffix} ${index}
