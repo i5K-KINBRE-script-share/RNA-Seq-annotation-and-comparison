@@ -3,7 +3,7 @@ SYNOPSIS
  RNA-SeqAlign2Ref.pl - The script writes scripts and qsubs to generate
        count summaries for illumina paired or single end reads after mapping against a
        reference genome. The script 1) converts illumina headers if the "-c"
-       parameter is used, 2) cleans raw reads using Prinseq
+       parameter is used, 2) unless the "-n" parameter is used this step cleans raw reads using Prinseq
        http://prinseq.sourceforge.net/manual.html, 3) index the reference
        genome for mapping, 4) reads are aligned to the genome with Tophat2
        (read more about Tophat2 at http://tophat.cbcb.umd.edu/manual.html) and
