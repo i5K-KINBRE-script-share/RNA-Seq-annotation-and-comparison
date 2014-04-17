@@ -223,11 +223,18 @@ for my $samples (@reads)
     open (SCRIPT, '>', "${home}/${project_name}_scripts/$samples->[0]_map.sh") or die "Can't open ${home}/${project_name}_scripts/$samples->[0]_map.sh!\n"; # create a shell script for each read-pair set;
     if (!$single)
     {
-        $text_out = read_file("${dirname}/Tophat2_Cufflinks_template.txt"); ## read shell template with slurp
+        if (!$noclean)
+        {
+            $text_out = read_file("${dirname}/Tophat2_Cufflinks_template.txt"); ## read for paired reads with that were cleaned  shell template with slurp
+        }
+        else
+        {
+            $text_out = read_file("${dirname}/Tophat2_Cufflinks_nocleaning_template.txt"); ## read shell for paired reads with that were not cleaned template with slurp
+        }
     }
     else
     {
-        $text_out = read_file("${dirname}/Tophat2_Cufflinks_single_template.txt"); ## read shell template with slurp
+        $text_out = read_file("${dirname}/Tophat2_Cufflinks_single_template.txt"); ## read for single reads shell template with slurp
     }
     print SCRIPT eval quote($text_out);
     print SCRIPT "\n";
@@ -305,6 +312,7 @@ perl RNA-SeqAlign2Ref.pl [options]
         -g          filename of the gtf or gff genome annotation
         Filtering options:
         -l          minimum read length
+        -n          do not clean reads (default is to clean)
         Fastq format options:
         -c          convert fastq headers
         -s          single end reads (default is paired)
@@ -360,6 +368,11 @@ The name of the project (no spaces). This will be used in filenaming.
 =item B<-c, --convert_header>
  
 If the illumina headers do not end in /1 or /2 use this parameter to indicat that headers need to be converted. Check your headers by typing "head [fasta filename]" and read more about illumina headers at http://en.wikipedia.org/wiki/Fastq#Illumina_sequence_identifiers.
+ 
+=item B<-n, --noclean>
+ 
+If this parameter is added than reads will not be cleaned.
+
  
 =item B<-l, --min_len>
  
