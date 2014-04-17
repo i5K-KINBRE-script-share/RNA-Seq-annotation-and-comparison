@@ -1,0 +1,11 @@
+#######################################################################
+#########             Check quality of raw reads             ##########
+#######################################################################
+perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -verbose -fastq $r1[$file] -fastq2 $r2[$file] -out_good null -graph_data ${home}/${project_name}_prinseq/${filename}_raw.gd -out_bad null
+
+#######################################################################
+#########               Rename raw reads                     ##########
+#######################################################################
+mv $r1[$file] ${home}/${filename}_good_1.fastq
+
+mv $r2[$file] ${home}/${filename}_good_2.fastq

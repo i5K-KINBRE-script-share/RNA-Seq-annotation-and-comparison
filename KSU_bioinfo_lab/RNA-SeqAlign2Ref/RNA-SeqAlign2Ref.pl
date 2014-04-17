@@ -23,7 +23,7 @@ use Pod::Usage;
 ##############         Print informative message             ##################
 ###############################################################################
 print "###########################################################\n";
-print "#  RNA-SeqAlign2Ref.pl  Version 1.1                       #\n";
+print "#  RNA-SeqAlign2Ref.pl  Version 1.2                       #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 3/15/14                    #\n";
 print "#  github.com/i5K-KINBRE-script-share                     #\n";
@@ -38,6 +38,7 @@ my %bams;
 my $convert_header = 0;
 my $min_len=40;
 my $single = 0;
+my $noclean = 0;
 my $man = 0;
 my $help = 0;
 GetOptions (
@@ -49,7 +50,8 @@ GetOptions (
     'c|convert_header' => \$convert_header,
     'g|GTF_GFF:s' => \$gtf,
     'l|min_len:s' => \$min_len,
-    's|single' => \$single
+    's|single' => \$single,
+    'n|noclean' => \$noclean
 )
 or pod2usage(2);
 pod2usage(1) if $help;
@@ -150,11 +152,25 @@ for my $samples (@reads)
         print QSUBS_CLEAN "qsub -l h_rt=48:00:00,mem=10G ${home}/${project_name}_scripts/${filename}_clean.sh\n";
         if (!$single)
         {
-            $text_out = read_file("${dirname}/Prinseq_template.txt"); ## read shell template with slurp
+            if (!$noclean)
+            {
+                $text_out = read_file("${dirname}/Prinseq_template.txt"); ## read shell template to clean paired end reads with slurp
+            }
+            else
+            {
+                $text_out = read_file("${dirname}/Prinseq_no_cleaning_template.txt"); ## read shell template to generate quality metrics for paired end reads using prinseq without cleaning with slurp
+            }
         }
         else
         {
-            $text_out = read_file("${dirname}/Prinseq_single_template.txt"); ## read shell template with slurp
+            if (!$noclean)
+            {
+                $text_out = read_file("${dirname}/Prinseq_single_template.txt"); ## read shell template to clean single end reads with slurp
+            }
+            else
+            {
+                $text_out = read_file("${dirname}/Prinseq_single_no_cleaning_template.txt"); ## read shell template to generate quality metrics for single end reads using prinseq without cleaning with slurp
+            }
         }
         print SCRIPT eval quote($text_out);
         print SCRIPT "\n";
