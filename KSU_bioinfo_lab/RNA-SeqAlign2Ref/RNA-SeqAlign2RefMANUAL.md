@@ -10,8 +10,23 @@ SYNOPSIS
        expressed genes and transcripts are assembled with Cufflinks2, 5) these
        assemblies are merged with Cuffmerge and differential expression is
        estimated with Cuffdiff2.
-
+       
 For examples parameter details run "perl RNA-SeqAlign2Ref.pl -man".
+       
+UPDATES
+       
+#####RNA-SeqAlign2Ref.pl Version 1.2 04/17/14
+
+RNA-SeqAlign2Ref.pl  Version 1.2 allows the user to skip read cleaning
+(prinseq will only be run to generate read quality metrics without
+cleaning) by adding the -n parameter to their script by adding the -n
+parameter to their command
+
+#####RNA-SeqAlign2Ref.pl Version 1.1 04/16/14
+
+RNA-SeqAlign2Ref.pl  Version 1.1 - fixed bug in writing index shell
+script
+
 
 USAGE
 
