@@ -26,7 +26,7 @@ Create symbolic links to putative transcripts from the de novo transcriptome cre
 
 ###Step 3: Write blast scripts
 
-    perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/Blastx/Blastx.pl -m 10 ~/test_blastx/CDH_clustermergedAssembly_cell_line_33.fa
+    perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/Blastx/Blastx.pl -m 10 -f ~/test_blastx/CDH_clustermergedAssembly_cell_line_33.fa
     
 ### Step 4: Run Blast scripts
 
@@ -40,7 +40,7 @@ Check for blasts that timed out
     
 If`~/test_blastx/blasts/unfinished.fasta` is an empty file annotation is complete. If fasta sequences have been added to it you will need to run Blastx.pl on `~/test_blastx/blasts/unfinished.fasta`. You should increase the hours of runtime allowed for each job because these remaining sequences timed out before the job finished.
 
-    perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/Blastx/Blastx.pl --h_rt 8:00:00 -m 10 ~/test_blastx/blasts/unfinished.fasta
+    perl ~/RNA-Seq-annotation-and-comparison/KSU_bioinfo_lab/Blastx/Blastx.pl --h_rt 8:00:00 -m 10 -f ~/test_blastx/blasts/unfinished.fasta
     
 Next check to make sure that the file  `~/test_blastx/blasts/blasts/unfinished.fasta` is empty. If it is not empty repeat the running Blastx.pl on the most recent output followed by FindFailed.pl until FindFailed.pl produces an empty fasta file.
 
