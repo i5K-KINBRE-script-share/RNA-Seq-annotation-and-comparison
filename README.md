@@ -55,7 +55,7 @@ USAGE: perl assembly_quality_stats_for_multiple_assemblies.pl [FASTA filename or
 
 ###Blastx.pl
 
-**Blastx.pl -** Script outputs fasta records split into files  of 100 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands. FindFailed.pl can be run after Blast.pl to find fasta sequences that have not been blasted (e.g. when a running blastx times out).
+**Blastx.pl -** Script outputs fasta records split into files  of 100 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands. FindFailed.pl can be run after Blastx.pl to find fasta sequences that have not been blasted (e.g. when a running blastx times out).
 
 For examples and parameter details run "perl Blastx.pl -man" or visit https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/Blastx/Blastx_LAB.md. For other NGS Beocat Pipelines visit http://i5k-kinbre-script-share.github.io/transcriptome-and-genome-assembly/.
 
