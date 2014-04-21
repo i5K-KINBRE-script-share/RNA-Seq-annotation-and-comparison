@@ -1,7 +1,6 @@
-
 NAME
 
-       Blastx.pl - Script outputs fasta records split into files of 100 or
+Blastx.pl - Script outputs fasta records split into files of 100 or
        less sequences in a directory called split. It also creates blastx bash
        scripts and qsub commands to annotate a de novo transcriptome with hits
        to the nr protein database.
@@ -9,7 +8,8 @@ NAME
 UPDATES
 
 ####Blastx.pl Version 1.1
-       Blastx.pl Version 1.1 added a “-f” parameter for the input fasta file.
+       
+Blastx.pl Version 1.1 added a “-f” parameter for the input fasta file.
        This replaces the last text in the command being the path to the fasta.
 
 USAGE
