@@ -63,6 +63,10 @@ print "HOME = $home\n";
 mkdir "${home}/${project_name}_scripts";
 mkdir "${home}/${project_name}_qsubs";
 mkdir "${home}/${project_name}_prinseq";
+if (-e "${home}/assemblies.txt")
+{
+    `rm ${home}/assemblies.txt`; # Remove old assembly lists
+}
 ###############################################################################
 ############## Create array of the sample names and read files    #############
 ###############################################################################
@@ -100,6 +104,7 @@ print QSUBS_MAP "#!/bin/bash\n";
 ###############################################################################
 ##############     Write scripts for each sample             ##################
 ###############################################################################
+
 my $old_sample = 0;
 my $new_sample = 0;
 for my $samples (@reads)
