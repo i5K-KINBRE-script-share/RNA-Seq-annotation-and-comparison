@@ -89,7 +89,8 @@ while(<OLD_FASTA>)
             
             print SH eval quote($text_out);
             print SH "\n";
-			print QSUBS "qsub -l mem=1G,h_rt=${h_rt} -e ${directories}logs/ -o ${directories}logs/ -pe single 16 ${bashs}\n";
+#			print QSUBS "qsub -l mem=1G,h_rt=${h_rt} -e ${directories}logs/ -o ${directories}logs/ -pe single 16 ${bashs}\n";
+            print QSUBS "qsub -l mem=1G,h_rt=${h_rt} -e ${directories}logs/${filename}_${file_count}.e.txt -o ${directories}logs/${filename}_${file_count}.o.txt -pe single 16 ${bashs}\n";
 			++$file_count;
 		}
         ##################################################################################
