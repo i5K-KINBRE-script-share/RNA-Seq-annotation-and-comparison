@@ -71,7 +71,12 @@ for my $xmlfile (@xmlfiles)
 			{
 				my ($header, @seqLines) = split /\n/;
 				$header =~ s/>//g;
-				my $blasted=`grep -c "<Iteration_query-def>${header}" $xmlfile`;
+                my $id = $header;
+                if ( $id =~ /\s/ )
+                {
+                    $id =~ s/(\A\S+).*/$1 /;
+                }
+				my $blasted=`grep -c "<Iteration_query-def>${id}" $xmlfile`;
 				if ($blasted == 0)
 				{
 					print OUTPUT ">${header}\n";
@@ -99,35 +104,35 @@ __END__
  
  FindFailed.pl - a package of scripts that find fasta sequences that have not been blasted (e.g. when a running blastx times out)
  
- =head1 USAGE
+=head1 USAGE
  
- perl FindFailed.pl -x [XML directory]
- 
- Documentation options:
+perl FindFailed.pl -x [XML directory]
+
+Documentation options:
  -help    brief help message
  -man	    full documentation
- Required options:
+Required options:
  -x	    XML directory
- 
- 
- =head1 OPTIONS
- 
- =over 8
- 
- =item B<-help>
- 
- Print a brief help message and exits.
- 
- =item B<-man>
- 
- Prints the more detailed manual page with output details and examples and exits.
- 
- =item B<-x, --xml>
- 
- The directory that your XMLs are in they are assumed to have been produced by blastx.pl. Do not include a trailing slash.
- 
- 
- =back
- 
- 
- =cut
+
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<-help>
+
+Print a brief help message and exits.
+
+=item B<-man>
+
+Prints the more detailed manual page with output details and examples and exits.
+
+=item B<-x, --xml>
+
+The directory that your XMLs are in they are assumed to have been produced by blastx.pl. Do not include a trailing slash.
+
+
+=back
+
+
+=cut
