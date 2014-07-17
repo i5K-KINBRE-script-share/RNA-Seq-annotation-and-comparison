@@ -131,6 +131,7 @@ If my total number of N's allowed increases I do increase the risk of counting a
 
 Describe the pros and cons of the parameter change that you made when customizing you script.
 
+4) Explore the various qsub commands for the read cleaning, indexing, mapping and differential expression testing steps by running `head ~/test_git/human19_qsubs/*`. Which steps can run on multiple cores?
 
 
 
