@@ -17,7 +17,7 @@ use IO::File;
 ##############         Print informative message                ##################
 ##################################################################################
 print "###########################################################\n";
-print "#  Count_reads_denovo.pl                                  #\n";
+print "#  Count_reads_denovo.pl Version 1.0                      #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 09/15/13                   #\n";
 print "#                                                         #\n";
