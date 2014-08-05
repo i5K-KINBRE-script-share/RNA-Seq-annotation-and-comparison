@@ -108,7 +108,7 @@ Cuffdiff produces results for many subsets of the data. Files beginning with “
 
 2) Open your "~/test_git/diff" directory. Take a moment to explore a differential expression file. Find an object that is estimated to be differetially expressed and report each columns' value for that object and interpret the result. 
 
-3) Customize your "RNA-SeqAlign2Ref.pl" script to change a parameter when you either clean with prinseq or use the tuxedo scripts. You have now run the following programs on Beocat: prinseq-lite.pl, tophat2, cufflinks, cuffdiff. You can find a full list of possible parameters for any of these by typing one of the following:
+3) Customize your copy of one template file with "_template" in the filename to change a parameter when you either clean with prinseq or use the tuxedo scripts. You have now run the following programs on Beocat: prinseq-lite.pl, tophat2, cufflinks, cuffdiff. You can find a full list of possible parameters for any of these by typing one of the following:
 
         perl /homes/sheltonj/abjc/prinseq-lite-0.20.3/prinseq-lite.pl -h
         /homes/bjsco/bin/tophat2 -h
