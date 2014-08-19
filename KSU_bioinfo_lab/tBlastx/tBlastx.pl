@@ -16,6 +16,17 @@ use File::Slurp;
 # use List::Util qw(sum);
 use Getopt::Long;
 use Pod::Usage;
+
+my $text = read_file('test_template_shell.txt');
+
+my $out = "$text";
+
+my $read1 = 'blag';
+my $read2 = 'adsfaaf';
+
+print eval quote($text);
+print "\n";
+
 ###############################################################################
 ##############         Print informative message             ##################
 ###############################################################################
@@ -57,15 +68,16 @@ my $dirname = dirname(__FILE__); # github directories (all github directories mu
 ##################################################################################
 my (${filename}, ${directories}, ${suffix}) = fileparse($input_fasta,'\..*');
 my $script_file = "${directories}${filename}_tblastx.sh";
-open ($script, ">", $script_file) or die "Can't open $script_file: $!";
-
+my $tab_out = "${directories}${filename}_tblastx.txt";
+open (SCRIPT, ">", $script_file) or die "Can't open $script_file: $!";
 my $text_out = read_file("${dirname}/tBlastx_template.txt"); ## read shell template with slurp
-print $script eval quote($text_out);
-print $script "\n";
-close ($script);
 
-# my $qsub =`qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}`;
-print "qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}\n";
+print SCRIPT eval quote($text_out);
+print SCRIPT "\n";
+close (SCRIPT);
+
+my $qsub =`qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}`;
+#print "qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}\n";
 print "$qsub\n";
 print "Done\n";
 ##################################################################################
