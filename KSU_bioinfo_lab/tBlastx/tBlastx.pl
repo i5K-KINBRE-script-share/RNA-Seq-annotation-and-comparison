@@ -36,7 +36,7 @@ my $email;
 my $max_target_seqs = 100;
 my $evalue = 10;
 my $h_rt = '6:00:00';
-my $input_fasta;
+my ($input_fasta_list,$input_fasta);
 my $man = 0;
 my $help = 0;
 GetOptions (
@@ -56,7 +56,7 @@ my $dirname = dirname(__FILE__); # github directories (all github directories mu
 ##################################################################################
 ##############               get fullpath fasta                 ##################
 ##################################################################################
-open (LIST, "<", $input_fasta) or die "can't open $input_fasta: $!";'
+open (LIST, "<", $input_fasta) or die "can't open $input_fasta: $!";
 while (<LIST>)
 {
     chomp;
