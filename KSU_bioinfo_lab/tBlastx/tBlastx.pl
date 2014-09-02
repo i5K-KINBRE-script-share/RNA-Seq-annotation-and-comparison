@@ -17,16 +17,6 @@ use File::Slurp;
 use Getopt::Long;
 use Pod::Usage;
 
-my $text = read_file('test_template_shell.txt');
-
-my $out = "$text";
-
-my $read1 = 'blag';
-my $read2 = 'adsfaaf';
-
-print eval quote($text);
-print "\n";
-
 ###############################################################################
 ##############         Print informative message             ##################
 ###############################################################################
@@ -52,7 +42,7 @@ my $help = 0;
 GetOptions (
         'help|?' => \$help,
         'man' => \$man,
-        'f|input_fasta:s' => \$input_fasta,
+        'f|input_fasta_list:s' => \$input_fasta_list,
         't|max_target_seqs:i' => \$max_target_seqs,
         'e|evalue:s' => \$evalue,
         'h_rt:s' => \$h_rt,
@@ -66,19 +56,24 @@ my $dirname = dirname(__FILE__); # github directories (all github directories mu
 ##################################################################################
 ##############               get fullpath fasta                 ##################
 ##################################################################################
-my (${filename}, ${directories}, ${suffix}) = fileparse($input_fasta,'\..*');
-my $script_file = "${directories}${filename}_tblastx.sh";
-my $tab_out = "${directories}${filename}_tblastx.txt";
-open (SCRIPT, ">", $script_file) or die "Can't open $script_file: $!";
-my $text_out = read_file("${dirname}/tBlastx_template.txt"); ## read shell template with slurp
+open (LIST, "<", $input_fasta) or die "can't open $input_fasta: $!";'
+while (<LIST>)
+{
+    chomp;
+    my (${filename}, ${directories}, ${suffix}) = fileparse($_,'\..*');
+    my $script_file = "${directories}${filename}_tblastx.sh";
+    my $tab_out = "${directories}${filename}_tblastx.txt";
+    open (SCRIPT, ">", $script_file) or die "Can't open $script_file: $!";
+    my $text_out = read_file("${dirname}/tBlastx_template.txt"); ## read shell template with slurp
 
-print SCRIPT eval quote($text_out);
-print SCRIPT "\n";
-close (SCRIPT);
+    print SCRIPT eval quote($text_out);
+    print SCRIPT "\n";
+    close (SCRIPT);
 
-my $qsub =`qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}`;
-#print "qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}\n";
-print "$qsub\n";
+    my $qsub =`qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}`;
+    #print "qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}\n";
+    print "$qsub\n";
+}
 print "Done\n";
 ##################################################################################
 ##############                  Documentation                   ##################
@@ -89,6 +84,8 @@ __END__
 =head1 NAME
 
 tBlastx.pl - Script outputs fasta records split into files of 100 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands to annotate a de novo transcriptome with hits to the nr protein database.
+ 
+File names should not include spaces.
 
 =head1 USAGE
 
@@ -119,7 +116,7 @@ Prints the more detailed manual page with output details and examples and exits.
  
 =item B<-f, --input_fasta>
  
-The fullpath for the fasta file of assembled transcripts. These will be blasted against the "nt" database.
+The full path to a plain text file (e.g. created in a text editor like notepad++ or textwrangler etc rather than Word, notepad, etc.). Each line of the file sould be the fullpath for the fasta file of assembled transcripts. These will be blasted against the "nt" database.
 
 =item B<-e, --evalue>
  
