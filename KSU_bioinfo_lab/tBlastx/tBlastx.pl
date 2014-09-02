@@ -32,21 +32,21 @@ print "###########################################################\n";
 ##############                get arguments                  ##################
 ###############################################################################
 
-my $email;
+
 my $max_target_seqs = 100;
 my $evalue = 10;
 my $h_rt = '6:00:00';
-my ($input_fasta_list,$input_fasta);
+my $input_fasta;
 my $man = 0;
 my $help = 0;
 GetOptions (
-        'help|?' => \$help,
-        'man' => \$man,
-        'f|input_fasta_list:s' => \$input_fasta_list,
-        't|max_target_seqs:i' => \$max_target_seqs,
-        'e|evalue:s' => \$evalue,
-        'h_rt:s' => \$h_rt,
-        'm|email:s' => \$email,
+'help|?' => \$help,
+'man' => \$man,
+'f|input_fasta_list:s' => \$input_fasta,
+'t|max_target_seqs:i' => \$max_target_seqs,
+'e|evalue:s' => \$evalue,
+'h_rt:s' => \$h_rt,
+
 )
 or pod2usage(2);
 pod2usage(1) if $help;
@@ -61,16 +61,17 @@ while (<LIST>)
 {
     chomp;
     my (${filename}, ${directories}, ${suffix}) = fileparse($_,'\..*');
+	my $fasta =$_;
     my $script_file = "${directories}${filename}_tblastx.sh";
     my $tab_out = "${directories}${filename}_tblastx.txt";
     open (SCRIPT, ">", $script_file) or die "Can't open $script_file: $!";
     my $text_out = read_file("${dirname}/tBlastx_template.txt"); ## read shell template with slurp
-
+    
     print SCRIPT eval quote($text_out);
     print SCRIPT "\n";
     close (SCRIPT);
-
-    my $qsub =`qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}`;
+    
+    my $qsub =`qsub -l mem=1G,h_rt=${h_rt} -pe single 16 ${script_file}`;
     #print "qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}\n";
     print "$qsub\n";
 }
@@ -84,7 +85,7 @@ __END__
 =head1 NAME
 
 tBlastx.pl - Script outputs fasta records split into files of 100 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands to annotate a de novo transcriptome with hits to the nr protein database.
- 
+
 File names should not include spaces.
 
 =head1 USAGE
@@ -92,16 +93,20 @@ File names should not include spaces.
 perl tBlastx.pl [options]
 
 Documentation options:
+ 
     -help    brief help message
     -man	    full documentation
+ 
 Required parameters:
+ 
     -f	    list of fastas to annotate with blastx
-    -e	    email address 
+
 Optional parameters:
+ 
     -t	     maximum sequences to report alignments for
     -e	     e-value
     --h_rt	 hours runtime in hh:mm:ss
- 
+
 =head1 OPTIONS
 
 =over 8
@@ -113,21 +118,21 @@ Print a brief help message and exits.
 =item B<-man>
 
 Prints the more detailed manual page with output details and examples and exits.
- 
+
 =item B<-f, --input_fasta>
- 
+
 The full path to a plain text file (e.g. created in a text editor like notepad++ or textwrangler etc rather than Word, notepad, etc.). Each line of the file sould be the fullpath for the fasta file of assembled transcripts. These will be blasted against the "nt" database.
 
 =item B<-e, --evalue>
- 
+
 The expect value for tblastx (default = 10)
 
 =item B<-t, --max_target_seqs>
- 
+
 The max target sequences for tblastx (default = 100)
 
 =item B<-h, --h_rt>
- 
+
 The hours of runtime allowed for tblastx on Beocat (default = 6:00)
 
 
@@ -137,6 +142,6 @@ The hours of runtime allowed for tblastx on Beocat (default = 6:00)
 
 B<OUTPUT DETAILS:>
 
-Script requires writes code to run tblastx on Beocat then submits the job.  
+Script requires writes code to run tblastx on Beocat then submits the job.
 
 =cut

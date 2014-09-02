@@ -3,4 +3,4 @@
 #####            tblastx fasta file sequences against nt database            #####
 ##################################################################################
 
-/homes/bioinfo/bioinfo_software/ncbi-blast-2.2.28+/bin/tblastx -query ${input_fasta} -db  /homes/bioinfo/bioinfo_software/blastdb/nt -out ${tab_out} -outfmt 6 -max_target_seqs ${max_target_seqs} -evalue ${evalue} -num_threads 16 
+/homes/bioinfo/bioinfo_software/ncbi-blast-2.2.28+/bin/tblastx -query ${fasta} -db  /homes/bioinfo/bioinfo_software/blastdb/nt -out ${tab_out} -outfmt 6 -max_target_seqs ${max_target_seqs} -evalue ${evalue} -num_threads 16 
