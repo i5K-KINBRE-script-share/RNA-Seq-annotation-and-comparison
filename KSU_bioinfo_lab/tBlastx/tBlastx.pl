@@ -95,7 +95,7 @@ Documentation options:
     -help    brief help message
     -man	    full documentation
 Required parameters:
-    -f	    fasta to annotate with blastx
+    -f	    list of fastas to annotate with blastx
     -e	    email address 
 Optional parameters:
     -t	     maximum sequences to report alignments for
