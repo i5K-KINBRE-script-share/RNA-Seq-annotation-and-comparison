@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 ##################################################################################
 #
-# USAGE: perl tBlastx.pl [FASTA filename]
+# USAGE: perl tBlastx.pl [options]
 # Script output fasta records split into files  of 100 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands.
 #  Created by jennifer shelton 12/30/13
 #
