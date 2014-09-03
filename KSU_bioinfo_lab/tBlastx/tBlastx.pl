@@ -21,7 +21,7 @@ use Pod::Usage;
 ##############         Print informative message             ##################
 ###############################################################################
 print "###########################################################\n";
-print "#  tBlastx.pl Version 1.0                                 #\n";
+print "#  tBlastx.pl Version 1.1                                 #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 08/19/14                   #\n";
 print "#  github.com/i5K-KINBRE-script-share                     #\n";
@@ -33,7 +33,7 @@ print "###########################################################\n";
 ###############################################################################
 
 
-my $max_target_seqs = 100;
+my $max_target_seqs = 10;
 my $evalue = 10;
 my $h_rt = '6:00:00';
 my $input_fasta;
@@ -129,7 +129,7 @@ The expect value for tblastx (default = 10)
 
 =item B<-t, --max_target_seqs>
 
-The max target sequences for tblastx (default = 100)
+The max target sequences for tblastx (default = 10)
 
 =item B<-h, --h_rt>
 
