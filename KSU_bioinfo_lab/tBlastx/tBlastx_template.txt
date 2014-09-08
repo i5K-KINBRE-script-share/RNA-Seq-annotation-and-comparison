@@ -3,7 +3,7 @@
 #####            tblastx fasta file sequences against nt database            #####
 ##################################################################################
 
-BLASTDB='/homes/bioinfo/bioinfo_software/blastdb'
+BLASTDB=\'/homes/bioinfo/bioinfo_software/blastdb\'
 
 export BLASTDB
 
