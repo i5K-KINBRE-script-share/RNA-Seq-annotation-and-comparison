@@ -1,11 +1,11 @@
 #!/usr/bin/perl
-##################################################################################
+#################################################################################
 #
 # USAGE: perl tBlastx.pl [options]
 # Script output fasta records split into files  of 100 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands.
 #  Created by jennifer shelton 12/30/13
 #
-##################################################################################
+#################################################################################
 use strict;
 use warnings;
 use IO::File;
@@ -21,7 +21,7 @@ use Pod::Usage;
 ##############         Print informative message             ##################
 ###############################################################################
 print "###########################################################\n";
-print "#  tBlastx.pl Version 1.1                                 #\n";
+print "#  tBlastx.pl Version 1.2                                 #\n";
 print "#                                                         #\n";
 print "#  Created by Jennifer Shelton 08/19/14                   #\n";
 print "#  github.com/i5K-KINBRE-script-share                     #\n";
@@ -53,32 +53,35 @@ pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 sub quote { qq!"$_[0]"! } ## interpolate slurped text
 my $dirname = dirname(__FILE__); # github directories (all github directories must be in the same directory)
-##################################################################################
-##############               get fullpath fasta                 ##################
-##################################################################################
+#################################################################################
+##############               get fullpath fasta                ##################
+#################################################################################
 open (LIST, "<", $input_fasta) or die "can't open $input_fasta: $!";
 while (<LIST>)
 {
-    chomp;
-    my (${filename}, ${directories}, ${suffix}) = fileparse($_,'\..*');
-	my $fasta =$_;
-    my $script_file = "${directories}${filename}_tblastx.sh";
-    my $tab_out = "${directories}${filename}_tblastx.txt";
-    open (SCRIPT, ">", $script_file) or die "Can't open $script_file: $!";
-    my $text_out = read_file("${dirname}/tBlastx_template.txt"); ## read shell template with slurp
-    
-    print SCRIPT eval quote($text_out);
-    print SCRIPT "\n";
-    close (SCRIPT);
-    
-    my $qsub =`qsub -l mem=1G,h_rt=${h_rt} -pe single 16 ${script_file}`;
-    #print "qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}\n";
-    print "$qsub\n";
+    unless (/^\s*$/)
+    {
+        chomp;
+        my (${filename}, ${directories}, ${suffix}) = fileparse($_,'\..*');
+        my $fasta =$_;
+        my $script_file = "${directories}${filename}_tblastx.sh";
+        my $tab_out = "${directories}${filename}_tblastx.txt";
+        open (SCRIPT, ">", $script_file) or die "Can't open $script_file: $!";
+        my $text_out = read_file("${dirname}/tBlastx_template.txt"); ## read shell template with slurp
+        
+        print SCRIPT eval quote($text_out);
+        print SCRIPT "\n";
+        close (SCRIPT);
+        
+        my $qsub =`qsub -l mem=1G,h_rt=${h_rt} -pe single 16 ${script_file}`;
+        #print "qsub -l mem=1G,h_rt=${h_rt} -pe single 16 -m abe -M ${email} ${script_file}\n";
+        print "$qsub\n";
+    }
 }
 print "Done\n";
-##################################################################################
-##############                  Documentation                   ##################
-##################################################################################
+#################################################################################
+##############                 Documentation                   ##################
+#################################################################################
 ## style adapted from http://www.perlmonks.org/?node_id=489861
 __END__
 
