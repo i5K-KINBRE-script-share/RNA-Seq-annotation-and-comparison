@@ -59,6 +59,9 @@ USAGE: perl assembly_quality_stats_for_multiple_assemblies.pl [FASTA filename or
 
 For examples and parameter details run "perl Blastx.pl -man" or visit https://github.com/i5K-KINBRE-script-share/RNA-Seq-annotation-and-comparison/blob/master/KSU_bioinfo_lab/Blastx/Blastx_LAB.md. For other NGS Beocat Pipelines visit http://i5k-kinbre-script-share.github.io/transcriptome-and-genome-assembly/.
 
+###tBlastx.pl
+
+**tBlastx.pl -** Script takes a list of FASTA files and outputs bash scripts and qsub commands that run tBlastx on them against the NCBI "nt" database. These scripts will output tab delimited Blast results that include taxanomic information.  
 
 ###Count_reads_denovo.pl
 
