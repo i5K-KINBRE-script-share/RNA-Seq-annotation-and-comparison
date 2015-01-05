@@ -2,8 +2,8 @@
 #################################################################################
 #
 # USAGE: perl tBlastx.pl [options]
-# Script output fasta records split into files  of 100 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands.
-#  Created by jennifer shelton 12/30/13
+# tBlastx.pl - Script takes a list of FASTA files and outputs bash scripts and qsub commands that run tBlastx on them against the NCBI "nt" database. These scripts will output tab delimited Blast results that include taxanomic information.  
+#  Created by jennifer shelton 08/19/14
 #
 #################################################################################
 use strict;
@@ -87,7 +87,7 @@ __END__
 
 =head1 NAME
 
-tBlastx.pl - Script outputs fasta records split into files of 100 or less sequences in a directory called split. It also creates blastx bash scripts and qsub commands to annotate a de novo transcriptome with hits to the nr protein database.
+tBlastx.pl - Script takes a list of FASTA files and outputs bash scripts and submits qsub commands that run tBlastx on them against the NCBI "nt" database. These scripts will output tab delimited Blast results that include taxanomic information.  
 
 File names should not include spaces.
 
@@ -102,7 +102,7 @@ Documentation options:
  
 Required parameters:
  
-    -f	    list of fastas to annotate with blastx
+    -f	    list of fastas to annotate with tblastx
 
 Optional parameters:
  
