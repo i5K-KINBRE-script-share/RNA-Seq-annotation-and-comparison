@@ -15,6 +15,11 @@ Olson_lab repository
     
 KSU_bioinfo_lab
 ---------------
+
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.17589.svg)](http://dx.doi.org/10.5281/zenodo.17589)
+
+Cite as: Jennifer Shelton et al.. (2015). RNA-Seq-annotation-and-comparison: RNA-Seq-annotation-and-comparison Version 1.0.0. Zenodo. 10.5281/zenodo.17589
+
 ###Count_fastas.pl
 
 **Count_fastas.pl** - see assembly_quality_stats_for_multiple_assemblies.pl
